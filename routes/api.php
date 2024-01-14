@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\LocationController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -27,4 +28,13 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::put('me', [UserController::class, 'update'])->name('update');
     Route::delete('me', [UserController::class, 'destroy'])->name('destroy');
     Route::post('logout', [UserController::class, 'logout'])->name('logout');
+});
+
+
+Route::get('locations/{x}', [LocationController::class, 'getNearestLocations']);
+Route::get('locations/user/{userId}', [LocationController::class, 'getUserLocations']);
+Route::group(['middleware' => 'auth:api'], function () {
+    Route::post('locations', [LocationController::class, 'create']);
+    Route::put('locations/{id}', [LocationController::class, 'edit']);
+    Route::delete('locations/{id}', [LocationController::class, 'delete']);
 });
