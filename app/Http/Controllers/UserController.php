@@ -15,6 +15,7 @@ class UserController extends Controller
     /**
      * login api
      *
+     * @param Request $request
      * @return JsonResponse
      */
     public function login(Request $request)
@@ -37,6 +38,7 @@ class UserController extends Controller
     /**
      * Register api
      *
+     * @param Request $request
      * @return JsonResponse
      */
     public function register(Request $request)
@@ -61,7 +63,7 @@ class UserController extends Controller
     }
 
     /**
-     * details api
+     * me api
      *
      * @return JsonResponse
      */
@@ -69,5 +71,62 @@ class UserController extends Controller
     {
         $user = Auth::user();
         return response()->json(['success' => $user], $this->successStatus);
+    }
+
+    /**
+     * update user api
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function update(Request $request)
+    {
+        $user = $request->user();
+
+        $validator = Validator::make($request->all(), [
+            'username' => 'sometimes|required|unique:users,username,' . $user->id,
+            'email' => 'sometimes|required|email|unique:users,email,' . $user->id,
+            'password' => 'nullable',
+            'phone' => 'nullable|digits_between:1,20',
+            'first_name' => 'nullable',
+            'last_name' => 'nullable',
+            'profile_picture' => 'nullable',
+            'bio' => 'nullable|string',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()], 400);
+        }
+        $user->update($request->except(['is_botanic', 'is_garden']));
+
+        return response()->json(['message' => 'User updated successfully'], 200);
+    }
+
+    /**
+     * destroy user api
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function destroy(Request $request)
+    {
+        $user = $request->user();
+        $user->delete();
+
+        return response()->json(['message' => 'User deleted successfully'], 200);
+    }
+
+
+    /**
+     * logout api
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function logout(Request $request)
+    {
+        $request->user()->token()->revoke();
+
+        return response()->json(['message' => 'User logged out successfully'], 200);
     }
 }

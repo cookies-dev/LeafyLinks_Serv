@@ -24,4 +24,7 @@ Route::post('login', [UserController::class, 'login'])->name('login');
 Route::post('register', [UserController::class, 'register'])->name('register');
 Route::group(['middleware' => 'auth:api'], function () {
     Route::post('me', [UserController::class, 'me'])->name('me');
+    Route::put('me', [UserController::class, 'update'])->name('update');
+    Route::delete('me', [UserController::class, 'destroy'])->name('destroy');
+    Route::post('logout', [UserController::class, 'logout'])->name('logout');
 });
