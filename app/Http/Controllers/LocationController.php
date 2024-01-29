@@ -8,16 +8,36 @@ use Illuminate\Support\Facades\Auth;
 
 class LocationController extends Controller
 {
-    public function getNearestLocations(Request $request, $x)
+
+    private function haversineGreatCircleDistance($latitudeFrom, $longitudeFrom, $latitudeTo, $longitudeTo, $earthRadius = 6371)
     {
-        $latitude = $request->input('latitude');
-        $longitude = $request->input('longitude');
+        $latFrom = deg2rad($latitudeFrom);
+        $lonFrom = deg2rad($longitudeFrom);
+        $latTo = deg2rad($latitudeTo);
+        $lonTo = deg2rad($longitudeTo);
 
-        $nearestLocations = Location::orderByRaw('SQRT(POW(lat - ?, 2) + POW(lng - ?, 2))', [$latitude, $longitude])
-            ->limit($x)
-            ->get();
+        $latDelta = $latTo - $latFrom;
+        $lonDelta = $lonTo - $lonFrom;
 
-        return response()->json($nearestLocations);
+        $angle = 2 * asin(sqrt(pow(sin($latDelta / 2), 2) +
+                cos($latFrom) * cos($latTo) * pow(sin($lonDelta / 2), 2)));
+        return $angle * $earthRadius;
+    }
+
+    public function getNearestLocations(Request $request, $lat, $lng, $dist = 50)
+    {
+        $locations = Location::all()
+            ->map(function ($location) use ($lat, $lng) {
+                $distance = $this->haversineGreatCircleDistance($lat, $lng, $location->lat, $location->lng);
+                return $location->toArray() + ['distance' => $distance];
+            })
+            ->filter(function ($location) use ($dist) {
+                return $location['distance'] <= $dist;
+            })
+            ->sortBy('distance')
+            ->take(10);
+
+        return response()->json(['data' => $locations]);
     }
 
     public function getLocationById($id)

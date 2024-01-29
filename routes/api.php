@@ -33,9 +33,9 @@ Route::group(['prefix' => 'users', 'as' => 'user.'], function () {
 });
 
 Route::group(['prefix' => 'locations', 'as' => 'location.'], function () {
-    Route::get('locations/{x}', [LocationController::class, 'getNearestLocations'])->name('nearest');
-    Route::get('locations/id/{id}', [LocationController::class, 'getLocationById'])->name('locationById');
-    Route::get('locations/user/{userId}', [LocationController::class, 'getUserLocations'])->name('userLocations');
+    Route::get('locations/{lat}&{lng}/{dist?}', [LocationController::class, 'getNearestLocations'])->whereNumber(['lat', 'lng', 'dist'])->name('nearest');
+    Route::get('locations/id/{id}', [LocationController::class, 'getLocationById'])->name('getId');
+    Route::get('locations/user/{userId}', [LocationController::class, 'getUserLocations'])->name('user');
     Route::group(['middleware' => 'auth:sanctum'], function () {
         Route::post('locations', [LocationController::class, 'create'])->name('create');
         Route::put('locations/{id}', [LocationController::class, 'edit'])->name('edit');
