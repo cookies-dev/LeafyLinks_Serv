@@ -32,6 +32,7 @@ Route::group(['middleware' => 'auth:api'], function () {
 
 
 Route::get('locations/{x}', [LocationController::class, 'getNearestLocations']);
+Route::get('locations/id/{id}', [LocationController::class, 'getLocationById']);
 Route::get('locations/user/{userId}', [LocationController::class, 'getUserLocations']);
 Route::group(['middleware' => 'auth:api'], function () {
     Route::post('locations', [LocationController::class, 'create']);

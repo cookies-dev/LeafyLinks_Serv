@@ -20,6 +20,12 @@ class LocationController extends Controller
         return response()->json($nearestLocations);
     }
 
+    public function getLocationById($id)
+    {
+        $location = Location::findOrFail($id);
+        return response()->json($location);
+    }
+
     public function getUserLocations($userId)
     {
         $locations = Location::where('user_id', $userId)->get();
