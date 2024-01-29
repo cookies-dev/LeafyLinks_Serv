@@ -1,12 +1,13 @@
 <?php
 
-namespace Tests\Unit;
+
+namespace Tests\Unit\User;
 
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
-class UserCreateTest extends TestCase
+class UserLoginTest extends TestCase
 {
     use RefreshDatabase;
 
