@@ -5,64 +5,47 @@ namespace Tests\Unit\User;
 
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Laravel\Sanctum\Sanctum;
 use Tests\TestCase;
 
 class UserLoginTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function testCreateUserWithMissingUsername()
+    public function testLoginUserWithMissingEmail()
     {
-        $response = $this->post('/api/register', [
-            'email' => 'test@test.com',
+        $response = $this->post(Route('user.login'), [
             'password' => 'test1',
         ]);
         $response->assertStatus(400);
     }
 
-    public function testCreateUserWithMissingEmail()
+    public function testLoginUserWithMissingPassword()
     {
-        $response = $this->post('/api/register', [
-            'username' => 'test',
-            'password' => 'test1',
+        $response = $this->post(Route('user.login'), [
+            'email' => 'test@test.com'
         ]);
         $response->assertStatus(400);
     }
 
-    public function testCreateUserWithMissingPassword()
-    {
-        $response = $this->post('/api/register', [
-            'username' => 'test',
-            'email' => 'test1@test.com',
-        ]);
-        $response->assertStatus(400);
-    }
-
-    public function testCreateUserWithExistingEmail()
+    public function testLoginUser()
     {
         User::factory()->create([
-            'email' => 'test2@test.com'
+            'email' => 'test@test.com',
+            'password' => 'test1'
         ]);
-        $response = $this->post('/api/register', [
-            'username' => 'test',
-            'email' => 'test2@test.com',
-            'password' => 'test1',
-        ]);
-        $response->assertStatus(400);
-    }
 
-    public function testCreateUserWithValidData()
-    {
-        $response = $this->post('/api/register', [
-            'username' => 'test',
-            'email' => 'test1@test.com',
-            'password' => 'test1',
+        $response = $this->post(Route('user.login'), [
+            'email' => 'test@test.com',
+            'password' => 'test1'
         ]);
         $response->assertStatus(200);
-
-        $this->assertDatabaseHas('users', [
-            'email' => 'test1@test.com'
-        ]);
     }
 
+    public function testLogout()
+    {
+        $user = User::factory()->create();
+        Sanctum::actingAs($user);
+        $this->post(Route('user.logout'))->assertStatus(200);
+    }
 }

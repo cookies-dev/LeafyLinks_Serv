@@ -20,19 +20,21 @@ class UserController extends Controller
      */
     public function login(Request $request)
     {
-        $request->validate([
+        $validator = Validator::make($request->all(), [
             'email' => 'required|email',
             'password' => 'required',
         ]);
 
-        if (!Auth::attempt($request->only('email', 'password'))) {
-            return response()->json(['message' => 'Failed to login'], 401);
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()], 400);
         }
-
+        if (!Auth::attempt($request->only('email', 'password'))) {
+            return response()->json(['error' => 'Failed to login'], 401);
+        }
         $user = Auth::user();
-        $token = $user->createToken('MyApp')->accessToken;
+        $token = $user->createToken('MyApp')->plainTextToken;
 
-        return response()->json(['token' => $token]);
+        return response()->json(['data' => ['token' => $token]]);
     }
 
     /**
@@ -44,28 +46,19 @@ class UserController extends Controller
     public function register(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'username' => 'required',
-            'email' => 'required|email',
+            'username' => 'required|unique:users,username',
+            'email' => 'required|email|unique:users,email',
             'password' => 'required',
 
         ]);
-        if ($validator->fails()) {
+        if ($validator->fails())
             return response()->json(['error' => $validator->errors()], 400);
-        }
         $input = $request->all();
-
-        $email = User::where('email', $input['email'])->first();
-        if ($email)
-            return response()->json(['error' => 'Email already exists'], 400);
-        $username = User::where('username', $input['username'])->first();
-        if ($username)
-            return response()->json(['error' => 'Username already exists'], 400);
-
         $input['password'] = bcrypt($input['password']);
         $user = User::create($input);
-        $success['token'] = $user->createToken('MyApp')->accessToken;
+        $success['token'] = $user->createToken('MyApp')->plainTextToken;
         $success['username'] = $user->name;
-        return response()->json(['success' => $success], $this->successStatus);
+        return response()->json(['data' => $success, 'success' => ['message' => 'User created successfully']], $this->successStatus);
     }
 
     /**
@@ -76,7 +69,7 @@ class UserController extends Controller
     public function me()
     {
         $user = Auth::user();
-        return response()->json(['success' => $user], $this->successStatus);
+        return response()->json(['data' => $user], $this->successStatus);
     }
 
     /**
@@ -103,9 +96,20 @@ class UserController extends Controller
         if ($validator->fails()) {
             return response()->json(['error' => $validator->errors()], 400);
         }
-        $user->update($request->except(['is_botanic', 'is_garden']));
+        if ($request->has('is_botanic') && $user->is_botanic != $request->is_botanic) {
+            return response()->json(['error' => 'Cannot edit is_botanic'], 400);
+        }
+        if ($request->has('is_garden') && $user->is_garden != $request->is_garden) {
+            return response()->json(['error' => 'Cannot edit is_garden'], 400);
+        }
 
-        return response()->json(['message' => 'User updated successfully'], 200);
+        if ($request->has('password')) {
+            $user->password = bcrypt($request->password);
+        }
+
+        $user->update($request->all());
+
+        return response()->json(['success' => ['message' => 'User updated successfully']], 200);
     }
 
     /**
@@ -119,7 +123,7 @@ class UserController extends Controller
         $user = $request->user();
         $user->delete();
 
-        return response()->json(['message' => 'User deleted successfully'], 200);
+        return response()->json(['success' => ['message' => 'User deleted successfully']], 200);
     }
 
 
@@ -131,8 +135,10 @@ class UserController extends Controller
      */
     public function logout(Request $request)
     {
-        $request->user()->token()->revoke();
-
-        return response()->json(['message' => 'User logged out successfully'], 200);
+        if (!$request->user()->currentAccessToken()) {
+            return response()->json(['error' => 'User is not logged in'], 400);
+        }
+        $request->user()->currentAccessToken()->delete();
+        return response()->json(['success' => ['message' => 'User logged out successfully']], 200);
     }
 }

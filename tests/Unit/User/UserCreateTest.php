@@ -12,7 +12,7 @@ class UserCreateTest extends TestCase
 
     public function testCreateUserWithMissingUsername()
     {
-        $response = $this->post('/api/register', [
+        $response = $this->post(Route('user.register'), [
             'email' => 'test@test.com',
             'password' => 'test1',
         ]);
@@ -21,7 +21,7 @@ class UserCreateTest extends TestCase
 
     public function testCreateUserWithMissingEmail()
     {
-        $response = $this->post('/api/register', [
+        $response = $this->post(Route('user.register'), [
             'username' => 'test',
             'password' => 'test1',
         ]);
@@ -30,7 +30,7 @@ class UserCreateTest extends TestCase
 
     public function testCreateUserWithMissingPassword()
     {
-        $response = $this->post('/api/register', [
+        $response = $this->post(Route('user.register'), [
             'username' => 'test',
             'email' => 'test1@test.com',
         ]);
@@ -42,7 +42,7 @@ class UserCreateTest extends TestCase
         User::factory()->create([
             'email' => 'test2@test.com'
         ]);
-        $response = $this->post('/api/register', [
+        $response = $this->post(Route('user.register'), [
             'username' => 'test',
             'email' => 'test2@test.com',
             'password' => 'test1',
@@ -52,7 +52,7 @@ class UserCreateTest extends TestCase
 
     public function testCreateUserWithValidData()
     {
-        $response = $this->post('/api/register', [
+        $response = $this->post(Route('user.register'), [
             'username' => 'test',
             'email' => 'test1@test.com',
             'password' => 'test1',
