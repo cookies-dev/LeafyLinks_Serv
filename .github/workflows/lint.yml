@@ -10,19 +10,15 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Set up PHP
-        uses: shivammathur/setup-php@v2
+      - uses: shivammathur/setup-php@15c43e89cdef867065b0213be354c2841860869e
         with:
           php-version: '8.1'
 
+      - name: Checkout code
+        uses: actions/checkout@v2
+
       - name: Install Composer dependencies
         run: composer install --prefer-dist --no-ansi --no-interaction --no-progress --no-scripts --ignore-platform-reqs
-
-      - name: Install PHP CodeSniffer
-        run: composer require "squizlabs/php_codesniffer"
 
       - name: Run PHP CodeSniffer
         run: vendor/bin/phpcs --standard=PSR2 --exclude=Generic.Files.LineLength app/
