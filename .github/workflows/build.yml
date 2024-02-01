@@ -19,9 +19,7 @@ jobs:
           php-version: '8.1'
 
       - name: Install Composer dependencies
-        run: |
-          composer install --prefer-dist --no-ansi --no-interaction --no-progress --no-scripts
-          composer update --lock
+        run: composer install --prefer-dist --no-ansi --no-interaction --no-progress --no-scripts --ignore-platform-reqs
 
       - name: Generate key
         run: php artisan key:generate
