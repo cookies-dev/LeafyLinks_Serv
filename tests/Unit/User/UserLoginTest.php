@@ -1,6 +1,5 @@
 <?php
 
-
 namespace User;
 
 use App\Models\User;

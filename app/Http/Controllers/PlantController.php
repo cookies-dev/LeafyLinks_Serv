@@ -7,7 +7,6 @@ use App\Models\Plant;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-
 class PlantController extends Controller
 {
     public function get(int $id)
@@ -38,8 +37,9 @@ class PlantController extends Controller
         ]);
         // check if location exists and belongs to user
         $location = Location::findOrFail($request->location_id);
-        if ($location->user_id !== Auth::id())
+        if ($location->user_id !== Auth::id()) {
             return response()->json(['error' => 'Unauthorized', 'message' => 'You are not the owner of this location'], 403);
+        }
 
         $plant = new Plant($request->all());
         $plant->save();
@@ -56,12 +56,14 @@ class PlantController extends Controller
         ]);
         $plant = Plant::findOrFail($id);
         $location = Location::findOrFail($plant->location_id);
-        if ($location->user_id !== Auth::id())
+        if ($location->user_id !== Auth::id()) {
             return response()->json(['error' => 'Unauthorized', 'message' => 'You are not the owner of current location'], 403);
+        }
 
         $location = Location::findOrFail($request->location_id);
-        if ($location->user_id !== Auth::id())
+        if ($location->user_id !== Auth::id()) {
             return response()->json(['error' => 'Unauthorized', 'message' => 'You are not the owner of new location'], 403);
+        }
 
         $plant->update($request->all());
         return response()->json(['message' => 'Plant updated successfully', 'data' => $plant]);
@@ -72,8 +74,9 @@ class PlantController extends Controller
         $plant = Plant::findOrFail($id);
 
         $location = Location::findOrFail($plant->location_id);
-        if ($location->user_id !== Auth::id())
+        if ($location->user_id !== Auth::id()) {
             return response()->json(['error' => 'Unauthorized', 'message' => 'You are not the owner of this location'], 403);
+        }
 
         $plant->delete();
         return response()->json(['message' => 'Plant deleted successfully']);

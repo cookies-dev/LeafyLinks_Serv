@@ -51,8 +51,9 @@ class UserController extends Controller
             'password' => 'required',
 
         ]);
-        if ($validator->fails())
+        if ($validator->fails()) {
             return response()->json(['error' => $validator->errors()], 400);
+        }
         $input = $request->all();
         $input['password'] = bcrypt($input['password']);
         $user = User::create($input);

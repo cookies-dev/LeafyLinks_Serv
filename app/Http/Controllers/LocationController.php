@@ -8,7 +8,6 @@ use Illuminate\Support\Facades\Auth;
 
 class LocationController extends Controller
 {
-
     private function haversineGreatCircleDistance($latitudeFrom, $longitudeFrom, $latitudeTo, $longitudeTo, $earthRadius = 6371)
     {
         $latFrom = deg2rad($latitudeFrom);
@@ -44,15 +43,16 @@ class LocationController extends Controller
     {
         $location = Location::findOrFail($id);
         return response()->json(['data' => $location]);
-
     }
 
     public function getUserLocations(?int $userId = null)
     {
-        if ($userId === null && Auth::id() === null)
+        if ($userId === null && Auth::id() === null) {
             return response()->json(['error' => 'Unauthorized', 'message' => 'You are not logged in'], 403);
-        if ($userId === null)
+        }
+        if ($userId === null) {
             $userId = Auth::id();
+        }
         $locations = Location::where('user_id', $userId)->get();
         return response()->json(['data' => $locations]);
     }
@@ -72,7 +72,6 @@ class LocationController extends Controller
         $location->save();
 
         return response()->json(['message' => 'Location created successfully', 'data' => $location], 201);
-
     }
 
     public function edit(Request $request, $id)

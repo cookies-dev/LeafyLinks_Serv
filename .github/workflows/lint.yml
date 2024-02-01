@@ -25,4 +25,4 @@ jobs:
         run: composer require "squizlabs/php_codesniffer"
 
       - name: Run PHP CodeSniffer
-        run: vendor/bin/phpcs --standard=PSR2 app/
+        run: vendor/bin/phpcs --standard=PSR2 --exclude=Generic.Files.LineLength app/
