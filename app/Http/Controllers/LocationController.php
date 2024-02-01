@@ -24,7 +24,7 @@ class LocationController extends Controller
         return $angle * $earthRadius;
     }
 
-    public function getNearestLocations(Request $request, $lat, $lng, $dist = 50)
+    public function getNearestLocations($lat, $lng, $dist = 50)
     {
         $locations = Location::all()
             ->map(function ($location) use ($lat, $lng) {
@@ -43,13 +43,18 @@ class LocationController extends Controller
     public function getLocationById($id)
     {
         $location = Location::findOrFail($id);
-        return response()->json($location);
+        return response()->json(['data' => $location]);
+
     }
 
-    public function getUserLocations($userId)
+    public function getUserLocations(?int $userId = null)
     {
+        if ($userId === null && Auth::id() === null)
+            return response()->json(['error' => 'Unauthorized', 'message' => 'You are not logged in'], 403);
+        if ($userId === null)
+            $userId = Auth::id();
         $locations = Location::where('user_id', $userId)->get();
-        return response()->json($locations);
+        return response()->json(['data' => $locations]);
     }
 
     public function create(Request $request)
@@ -66,7 +71,8 @@ class LocationController extends Controller
         $location->user_id = Auth::id();
         $location->save();
 
-        return response()->json($location, 201);
+        return response()->json(['message' => 'Location created successfully', 'data' => $location], 201);
+
     }
 
     public function edit(Request $request, $id)
@@ -74,7 +80,7 @@ class LocationController extends Controller
         $location = Location::findOrFail($id);
 
         if (Auth::id() !== $location->user_id) {
-            return response()->json(['error' => 'Unauthorized'], 403);
+            return response()->json(['error' => 'Unauthorized', 'message' => 'You are not logged in as the owner of this location'], 403);
         }
 
         $request->validate([
@@ -86,7 +92,7 @@ class LocationController extends Controller
         ]);
 
         $location->update($request->all());
-        return response()->json($location);
+        return response()->json(['message' => 'Location updated successfully', 'data' => $location]);
     }
 
     public function delete($id)
@@ -94,7 +100,7 @@ class LocationController extends Controller
         $location = Location::findOrFail($id);
 
         if (Auth::id() !== $location->user_id) {
-            return response()->json(['error' => 'Unauthorized'], 403);
+            return response()->json(['error' => 'Unauthorized', 'message' => 'You are not logged in as the owner of this location'], 403);
         }
 
         $location->delete();

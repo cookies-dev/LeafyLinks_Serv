@@ -57,7 +57,7 @@ class LocationGetTest extends TestCase
         $response = $this->get(Route('location.getId', ['id' => 1]));
         $response->assertStatus(200);
 
-        $data = $response->json();
+        $data = $response->json()['data'];
         $this->assertEquals(0, $data['lat']);
         $this->assertEquals(0, $data['lng']);
     }
@@ -67,7 +67,7 @@ class LocationGetTest extends TestCase
         $response = $this->get(Route('location.user', ['userId' => 1]));
         $response->assertStatus(200);
 
-        $data = $response->json();
+        $data = $response->json()['data'];
         $this->assertCount(1, $data);
 
         $location = $this->locations->where('user_id', 1)->first();
