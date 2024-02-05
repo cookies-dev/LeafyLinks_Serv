@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CommentController;
 use App\Http\Controllers\LocationController;
 use App\Http\Controllers\PlantController;
 use App\Http\Controllers\UserController;
@@ -52,5 +53,15 @@ Route::group(['prefix' => 'plants', 'as' => 'plant.'], function () {
         Route::post('plant', [PlantController::class, 'create'])->name('create');
         Route::put('plant/{id}', [PlantController::class, 'edit'])->name('edit');
         Route::delete('plant/{id}', [PlantController::class, 'delete'])->name('delete');
+    });
+    Route::get('plant/{plantId}/comment/', [CommentController::class, 'get'])->name('comments');
+});
+
+Route::group(['prefix' => 'comments', 'as' => 'comment.'], function () {
+    Route::get('comment/{id}', [CommentController::class, 'getById'])->name('get');
+    Route::group(['middleware' => 'auth:sanctum'], function () {
+        Route::post('comment', [CommentController::class, 'create'])->name('create');
+        Route::put('comment/{id}', [CommentController::class, 'edit'])->name('edit');
+        Route::delete('comment/{id}', [CommentController::class, 'delete'])->name('delete');
     });
 });

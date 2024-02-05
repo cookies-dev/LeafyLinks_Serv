@@ -35,10 +35,13 @@ class PlantController extends Controller
             'name' => 'required|string',
             'desc' => 'required|string',
         ]);
-        // check if location exists and belongs to user
+
         $location = Location::findOrFail($request->location_id);
         if ($location->user_id !== Auth::id()) {
-            return response()->json(['error' => 'Unauthorized', 'message' => 'You are not the owner of this location'], 403);
+            return response()->json(
+                ['error' => 'Unauthorized', 'message' => 'You are not the owner of this location'],
+                403
+            );
         }
 
         $plant = new Plant($request->all());
@@ -55,14 +58,19 @@ class PlantController extends Controller
             'desc' => 'required|string',
         ]);
         $plant = Plant::findOrFail($id);
-        $location = Location::findOrFail($plant->location_id);
-        if ($location->user_id !== Auth::id()) {
-            return response()->json(['error' => 'Unauthorized', 'message' => 'You are not the owner of current location'], 403);
+        if ($plant->location->user_id !== Auth::id()) {
+            return response()->json(
+                ['error' => 'Unauthorized', 'message' => 'You are not the owner of current location'],
+                403
+            );
         }
 
         $location = Location::findOrFail($request->location_id);
         if ($location->user_id !== Auth::id()) {
-            return response()->json(['error' => 'Unauthorized', 'message' => 'You are not the owner of new location'], 403);
+            return response()->json(
+                ['error' => 'Unauthorized', 'message' => 'You are not the owner of new location'],
+                403
+            );
         }
 
         $plant->update($request->all());
@@ -73,9 +81,11 @@ class PlantController extends Controller
     {
         $plant = Plant::findOrFail($id);
 
-        $location = Location::findOrFail($plant->location_id);
-        if ($location->user_id !== Auth::id()) {
-            return response()->json(['error' => 'Unauthorized', 'message' => 'You are not the owner of this location'], 403);
+        if ($plant->location->user_id !== Auth::id()) {
+            return response()->json(
+                ['error' => 'Unauthorized', 'message' => 'You are not the owner of this location'],
+                403
+            );
         }
 
         $plant->delete();

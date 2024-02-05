@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 /**
  * @mixin Builder
  */
-class Location extends Model
+class Comment extends Model
 {
     use HasFactory;
 
@@ -20,25 +20,18 @@ class Location extends Model
      * @var array<int, string>
      */
     protected $fillable = [
-        'name',
         'user_id',
-        'lat',
-        'lng',
-        'address',
-        'public',
-    ];
-
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array<string, string>
-     */
-    protected $casts = [
-        'public' => 'boolean',
+        'plant_id',
+        'comment',
     ];
 
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function plant(): BelongsTo
+    {
+        return $this->belongsTo(Plant::class);
     }
 }

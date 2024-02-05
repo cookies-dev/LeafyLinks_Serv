@@ -32,7 +32,6 @@ class LocationGetTest extends TestCase
 
         $data = $response->json()['data'];
         foreach ($data as $key => $location) {
-            print_r($location['distance']);
             $this->assertEquals($key * 0.01, $location['lat']);
             $this->assertEquals($key * 0.01, $location['lng']);
         }

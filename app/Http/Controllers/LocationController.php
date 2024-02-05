@@ -8,19 +8,19 @@ use Illuminate\Support\Facades\Auth;
 
 class LocationController extends Controller
 {
-    private function haversineGreatCircleDistance($latitudeFrom, $longitudeFrom, $latitudeTo, $longitudeTo, $earthRadius = 6371)
+    private function haversineGreatCircleDistance($latFrom, $longFrom, $latTo, $longTo)
     {
-        $latFrom = deg2rad($latitudeFrom);
-        $lonFrom = deg2rad($longitudeFrom);
-        $latTo = deg2rad($latitudeTo);
-        $lonTo = deg2rad($longitudeTo);
+        $latFrom = deg2rad($latFrom);
+        $lonFrom = deg2rad($longFrom);
+        $latTo = deg2rad($latTo);
+        $lonTo = deg2rad($longTo);
 
         $latDelta = $latTo - $latFrom;
         $lonDelta = $lonTo - $lonFrom;
 
         $angle = 2 * asin(sqrt(pow(sin($latDelta / 2), 2) +
                 cos($latFrom) * cos($latTo) * pow(sin($lonDelta / 2), 2)));
-        return $angle * $earthRadius;
+        return $angle * 6371;
     }
 
     public function getNearestLocations($lat, $lng, $dist = 50)
@@ -71,7 +71,10 @@ class LocationController extends Controller
         $location->user_id = Auth::id();
         $location->save();
 
-        return response()->json(['message' => 'Location created successfully', 'data' => $location], 201);
+        return response()->json(
+            ['message' => 'Location created successfully', 'data' => $location],
+            201
+        );
     }
 
     public function edit(Request $request, $id)
@@ -79,7 +82,10 @@ class LocationController extends Controller
         $location = Location::findOrFail($id);
 
         if (Auth::id() !== $location->user_id) {
-            return response()->json(['error' => 'Unauthorized', 'message' => 'You are not logged in as the owner of this location'], 403);
+            return response()->json(
+                ['error' => 'Unauthorized', 'message' => 'You are not logged in as the owner of this location'],
+                403
+            );
         }
 
         $request->validate([
@@ -99,7 +105,10 @@ class LocationController extends Controller
         $location = Location::findOrFail($id);
 
         if (Auth::id() !== $location->user_id) {
-            return response()->json(['error' => 'Unauthorized', 'message' => 'You are not logged in as the owner of this location'], 403);
+            return response()->json(
+                ['error' => 'Unauthorized', 'message' => 'You are not logged in as the owner of this location'],
+                403
+            );
         }
 
         $location->delete();
