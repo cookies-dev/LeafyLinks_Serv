@@ -26,7 +26,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::group(['prefix' => 'users', 'as' => 'user.'], function () {
     Route::post('login', [UserController::class, 'login'])->name('login');
     Route::post('register', [UserController::class, 'register'])->name('register');
-    Route::group(['middleware' => 'auth:sanctum', 'prefix' => 'user'], function () {
+    Route::group(['middleware' => 'auth:sanctum'], function () {
         Route::post('me', [UserController::class, 'me'])->name('me');
         Route::put('me', [UserController::class, 'update'])->name('update');
         Route::delete('me', [UserController::class, 'destroy'])->name('destroy');
@@ -35,33 +35,33 @@ Route::group(['prefix' => 'users', 'as' => 'user.'], function () {
 });
 
 Route::group(['prefix' => 'locations', 'as' => 'location.'], function () {
-    Route::get('locations/{lat}&{lng}/{dist?}', [LocationController::class, 'getNearestLocations'])->whereNumber(['lat', 'lng', 'dist'])->name('nearest');
-    Route::get('locations/id/{id}', [LocationController::class, 'getLocationById'])->name('getId');
-    Route::get('locations/user/{userId?}', [LocationController::class, 'getUserLocations'])->name('user');
+    Route::get('{lat}&{lng}/{dist?}', [LocationController::class, 'getNearestLocations'])->whereNumber(['lat', 'lng', 'dist'])->name('nearest');
+    Route::get('id/{id}', [LocationController::class, 'getLocationById'])->name('getId');
+    Route::get('user/{userId?}', [LocationController::class, 'getUserLocations'])->name('user');
     Route::group(['middleware' => 'auth:sanctum'], function () {
-        Route::post('locations', [LocationController::class, 'create'])->name('create');
-        Route::put('locations/{id}', [LocationController::class, 'edit'])->name('edit');
-        Route::delete('locations/{id}', [LocationController::class, 'delete'])->name('delete');
+        Route::post('', [LocationController::class, 'create'])->name('create');
+        Route::put('{id}', [LocationController::class, 'edit'])->name('edit');
+        Route::delete('{id}', [LocationController::class, 'delete'])->name('delete');
     });
     Route::get('locations/{idLocation}/plants', [PlantController::class, 'plants'])->name('plants');
 });
 
 Route::group(['prefix' => 'plants', 'as' => 'plant.'], function () {
-    Route::get('plant/{id}', [PlantController::class, 'get'])->name('get');
-    Route::get('plant/search/query={query}&limit={limit}', [PlantController::class, 'search'])->name('search');
+    Route::get('{id}', [PlantController::class, 'get'])->name('get');
+    Route::get('search/query={query}&limit={limit}', [PlantController::class, 'search'])->name('search');
     Route::group(['middleware' => 'auth:sanctum'], function () {
-        Route::post('plant', [PlantController::class, 'create'])->name('create');
-        Route::put('plant/{id}', [PlantController::class, 'edit'])->name('edit');
-        Route::delete('plant/{id}', [PlantController::class, 'delete'])->name('delete');
+        Route::post('', [PlantController::class, 'create'])->name('create');
+        Route::put('{id}', [PlantController::class, 'edit'])->name('edit');
+        Route::delete('{id}', [PlantController::class, 'delete'])->name('delete');
     });
     Route::get('plant/{plantId}/comment/', [CommentController::class, 'get'])->name('comments');
 });
 
 Route::group(['prefix' => 'comments', 'as' => 'comment.'], function () {
-    Route::get('comment/{id}', [CommentController::class, 'getById'])->name('get');
+    Route::get('{id}', [CommentController::class, 'getById'])->name('get');
     Route::group(['middleware' => 'auth:sanctum'], function () {
-        Route::post('comment', [CommentController::class, 'create'])->name('create');
-        Route::put('comment/{id}', [CommentController::class, 'edit'])->name('edit');
-        Route::delete('comment/{id}', [CommentController::class, 'delete'])->name('delete');
+        Route::post('', [CommentController::class, 'create'])->name('create');
+        Route::put('{id}', [CommentController::class, 'edit'])->name('edit');
+        Route::delete('{id}', [CommentController::class, 'delete'])->name('delete');
     });
 });
