@@ -70,7 +70,7 @@ jobs:
       - name: Compile assets
         run: |
           npm install
-          npm run production
+          npm run build
 
       - name: Commit files
         run: |
