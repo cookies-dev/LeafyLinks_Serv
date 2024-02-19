@@ -98,7 +98,7 @@ jobs:
           script: |
             cd ${{ secrets.PWD }}
             git switch production
-            git pull
+            git pull --rebase origin production
             php artisan migrate --seed
             php artisan config:cache
             php artisan route:cache
