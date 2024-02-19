@@ -3,8 +3,7 @@
     "type": "module",
     "scripts": {
         "dev": "vite",
-        "build": "vite build",
-        "production": "cross-env NODE_ENV=production vite build"
+        "build": "vite build"
     },
     "devDependencies": {
         "axios": "^1.6.4",
