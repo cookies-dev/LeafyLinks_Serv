@@ -84,3 +84,18 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           branch: production
           force: true
+  deploy_to_server:
+    needs: [ deploy ]
+    runs-on: ubuntu-latest
+    steps:
+      - name: executing remote ssh commands using password
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.KEY }}
+          port: ${{ secrets.PORT }}
+          script: |
+            whoami
+            ls -al
+            pwd
