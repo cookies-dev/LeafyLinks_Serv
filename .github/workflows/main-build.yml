@@ -96,6 +96,10 @@ jobs:
           key: ${{ secrets.KEY }}
           port: ${{ secrets.PORT }}
           script: |
-            whoami
-            ls -al
-            pwd
+            cd ${{ secrets.PWD }}
+            git switch production
+            git pull
+            php artisan migrate --seed
+            php artisan config:cache
+            php artisan route:cache
+            php artisan view:cache
