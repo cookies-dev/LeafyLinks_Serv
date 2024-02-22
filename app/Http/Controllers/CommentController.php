@@ -17,7 +17,7 @@ class CommentController extends Controller
 {
     /**
      * @OA\Get(
-     *     path="plant/{plantId}/comment/",
+     *     path="/api/plant/{plantId}/comment/",
      *     summary="Get comments by plant ID",
      *     tags={"Plants"},
      *     @OA\Parameter(
@@ -39,7 +39,7 @@ class CommentController extends Controller
 
     /**
      * @OA\Get(
-     *     path="/comments/{id}",
+     *     path="/api/comments/{id}",
      *     summary="Get comment by ID",
      *     tags={"Comments"},
      *     @OA\Parameter(
@@ -61,7 +61,7 @@ class CommentController extends Controller
 
     /**
      * @OA\Post(
-     *     path="/comments",
+     *     path="/api/comments",
      *     summary="Create a new comment",
      *     tags={"Comments"},
      *     security={{"bearerAuth": {}}},
@@ -96,7 +96,7 @@ class CommentController extends Controller
 
     /**
      * @OA\Put(
-     *     path="/comments/{id}",
+     *     path="/api/comments/{id}",
      *     summary="Edit a comment",
      *     tags={"Comments"},
      *     security={{"bearerAuth": {}}},
@@ -144,7 +144,7 @@ class CommentController extends Controller
 
     /**
      * @OA\Delete(
-     *     path="/comments/{id}",
+     *     path="/api/comments/{id}",
      *     summary="Delete a comment",
      *     tags={"Comments"},
      *     security={{"bearerAuth": {}}},

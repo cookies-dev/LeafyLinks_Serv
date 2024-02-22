@@ -18,7 +18,7 @@ class PlantController extends Controller
 {
     /**
      * @OA\Get(
-     *     path="/plants/{id}",
+     *     path="/api/plants/{id}",
      *     summary="Get plant by ID",
      *     tags={"Plants"},
      *     @OA\Parameter(
@@ -40,7 +40,7 @@ class PlantController extends Controller
 
     /**
      * @OA\Get(
-     *     path="/plants/search/query={query}&limit={limit}",
+     *     path="/api/plants/search/query={query}&limit={limit}",
      *     summary="Search plants",
      *     tags={"Plants"},
      *     @OA\Parameter(
@@ -69,7 +69,7 @@ class PlantController extends Controller
 
     /**
      * @OA\Get(
-     *     path="/plants/{idLocation}/plants",
+     *     path="/api/plants/{idLocation}/plants",
      *     summary="Get plants by location ID",
      *     tags={"Plants"},
      *     @OA\Parameter(
@@ -91,7 +91,7 @@ class PlantController extends Controller
 
     /**
      * @OA\Post(
-     *     path="/plants",
+     *     path="/api/plants",
      *     summary="Create a new plant",
      *     tags={"Plants"},
      *     security={{"bearerAuth": {}}},
@@ -137,7 +137,7 @@ class PlantController extends Controller
 
     /**
      * @OA\Put(
-     *     path="/plants/{id}",
+     *     path="/api/plants/{id}",
      *     summary="Edit a plant",
      *     tags={"Plants"},
      *     security={{"bearerAuth": {}}},
@@ -196,7 +196,7 @@ class PlantController extends Controller
 
     /**
      * @OA\Delete(
-     *     path="/plants/{id}",
+     *     path="/api/plants/{id}",
      *     summary="Delete a plant",
      *     tags={"Plants"},
      *     security={{"bearerAuth": {}}},

@@ -21,7 +21,7 @@ class UserController extends Controller
 
     /**
      * @OA\Post(
-     *     path="/users/login",
+     *     path="/api/users/login",
      *     summary="User Login",
      *     tags={"Users"},
      *     @OA\RequestBody(
@@ -63,7 +63,7 @@ class UserController extends Controller
 
     /**
      * @OA\Post(
-     *     path="/users/register",
+     *     path="/api/users/register",
      *     summary="User Registration",
      *     tags={"Users"},
      *     @OA\RequestBody(
@@ -109,7 +109,7 @@ class UserController extends Controller
 
     /**
      * @OA\Get(
-     *     path="/users/{id}",
+     *     path="/api/users/{id}",
      *     summary="Get User by ID",
      *     tags={"Users"},
      *     @OA\Parameter(
@@ -147,7 +147,7 @@ class UserController extends Controller
 
     /**
      * @OA\Get(
-     *     path="/users/me",
+     *     path="/api/users/me",
      *     summary="Get current user details",
      *     tags={"Users"},
      *     security={{"bearerAuth": {}}},
@@ -164,7 +164,7 @@ class UserController extends Controller
 
     /**
      * @OA\Put(
-     *     path="/users/me",
+     *     path="/api/users/me",
      *     summary="Update current user details",
      *     tags={"Users"},
      *     security={{"bearerAuth": {}}},
@@ -228,7 +228,7 @@ class UserController extends Controller
 
     /**
      * @OA\Delete(
-     *     path="/users/me",
+     *     path="/api/users/me",
      *     summary="Delete current user",
      *     tags={"Users"},
      *     security={{"bearerAuth": {}}},
@@ -248,7 +248,7 @@ class UserController extends Controller
 
     /**
      * @OA\Post(
-     *     path="/users/logout",
+     *     path="/api/users/logout",
      *     summary="Logout current user",
      *     tags={"Users"},
      *     security={{"bearerAuth": {}}},

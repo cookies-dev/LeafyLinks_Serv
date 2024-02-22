@@ -32,7 +32,7 @@ class LocationController extends Controller
 
     /**
      * @OA\Get(
-     *     path="/locations/{lat}&{lng}/{dist?}",
+     *     path="/api/locations/{lat}&{lng}/{dist?}",
      *     summary="Get nearest locations",
      *     tags={"Locations"},
      *     @OA\Parameter(
@@ -77,7 +77,7 @@ class LocationController extends Controller
 
     /**
      * @OA\Get(
-     *     path="/locations/id/{id}",
+     *     path="/api/locations/id/{id}",
      *     summary="Get location by ID",
      *     tags={"Locations"},
      *     @OA\Parameter(
@@ -99,7 +99,7 @@ class LocationController extends Controller
 
     /**
      * @OA\Get(
-     *     path="/locations/user/{userId}",
+     *     path="/api/locations/user/{userId}",
      *     summary="Get locations by user ID",
      *     tags={"Locations"},
      *     @OA\Parameter(
@@ -127,7 +127,7 @@ class LocationController extends Controller
 
     /**
      * @OA\Post(
-     *     path="/locations",
+     *     path="/api/locations",
      *     summary="Create a new location",
      *     tags={"Locations"},
      *     security={{"bearerAuth": {}}},
@@ -171,7 +171,7 @@ class LocationController extends Controller
 
     /**
      * @OA\Put(
-     *     path="/locations/{id}",
+     *     path="/api/locations/{id}",
      *     summary="Edit a location",
      *     tags={"Locations"},
      *     security={{"bearerAuth": {}}},
@@ -226,7 +226,7 @@ class LocationController extends Controller
 
     /**
      * @OA\Delete(
-     *     path="/locations/{id}",
+     *     path="/api/locations/{id}",
      *     summary="Delete a location",
      *     tags={"Locations"},
      *     security={{"bearerAuth": {}}},
