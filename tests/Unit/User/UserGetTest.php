@@ -118,15 +118,14 @@ class UserGetTest extends TestCase
 
     public function testGetUserInformationDoesntExist()
     {
-        echo Route('user.get', ['id' => 10]);
-        $response = $this->post(Route('user.get', ['id' => 10]));
+        $response = $this->get(Route('user.get', ['id' => 10]));
         $response->assertStatus(404);
     }
 
     public function testGetUserInformationExists()
     {
         $user = User::factory()->create();
-        $response = $this->post(Route('user.get', ['id' => $user->id]));
+        $response = $this->get(Route('user.get', ['id' => $user->id]));
         $response->assertStatus(200);
 
         $data = $response->json()['data'];
