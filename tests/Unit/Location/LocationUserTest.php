@@ -31,17 +31,41 @@ class LocationUserTest extends TestCase
             });
     }
 
+    public function testGetUserLocationsByIdDoesNotExist()
+    {
+        Sanctum::actingAs($this->user);
+        $response = $this->get(Route('location.user', ['userId' => 999]));
+
+        $response->assertStatus(200);
+        $data = $response->json()['data'];
+        $this->assertCount(0, $data);
+    }
+
+    public function testGetUserLocationsById()
+    {
+        Sanctum::actingAs($this->user);
+        $response = $this->get(Route('location.user', ['userId' => $this->user->id]));
+
+        $response->assertStatus(200);
+        $data = $response->json()['data'];
+        $this->assertCount(3, $data);
+        foreach ($data as $key => $location) {
+            $this->assertEquals($key * 0.01, $location['lat']);
+            $this->assertEquals($key * 0.01, $location['lng']);
+        }
+    }
 
     public function testGetUserLocationsUnauthorized()
     {
-        $response = $this->get(Route('location.user'));
-        $response->assertStatus(403);
+        $response = $this->get(Route('location.get'));
+        $response->assertStatus(302);
+        $response->assertRedirect(Route('user.login'));
     }
 
     public function testGetUserLocations()
     {
         Sanctum::actingAs($this->user);
-        $response = $this->get(Route('location.user'));
+        $response = $this->get(Route('location.get'));
 
         $response->assertStatus(200);
         $data = $response->json()['data'];
