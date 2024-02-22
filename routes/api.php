@@ -28,6 +28,7 @@ Route::group(['prefix' => 'users', 'as' => 'user.'], function () {
     Route::post('login', [UserController::class, 'login'])->name('login');
     Route::post('register', [UserController::class, 'register'])->name('register');
     Route::group(['middleware' => 'auth:sanctum'], function () {
+        Route::get('me', [UserController::class, 'me'])->name('me');
         Route::post('me', [UserController::class, 'me'])->name('me');
         Route::put('me', [UserController::class, 'update'])->name('update');
         Route::delete('me', [UserController::class, 'destroy'])->name('destroy');
