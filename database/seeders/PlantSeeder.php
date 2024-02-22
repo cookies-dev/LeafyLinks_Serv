@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Location;
 use App\Models\Plant;
 use App\Models\User;
 use Illuminate\Database\Seeder;
@@ -12,7 +13,14 @@ class PlantSeeder extends Seeder
     {
         User::factory()
             ->count(10)
-            ->has(Plant::factory()->count(5))
-            ->create();
+            ->create()
+            ->each(function ($user) {
+                $location = Location::factory()->create([
+                    'user_id' => $user->id,
+                ]);
+                Plant::factory()->count(5)->create([
+                    'location_id' => $location->id,
+                ]);
+            });
     }
 }
