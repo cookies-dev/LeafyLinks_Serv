@@ -26,6 +26,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::group(['prefix' => 'users', 'as' => 'user.'], function () {
     Route::post('login', [UserController::class, 'login'])->name('login');
     Route::post('register', [UserController::class, 'register'])->name('register');
+    Route::post('user/{id}', [UserController::class, 'getById'])->name('get');
     Route::group(['middleware' => 'auth:sanctum'], function () {
         Route::post('me', [UserController::class, 'me'])->name('me');
         Route::put('me', [UserController::class, 'update'])->name('update');

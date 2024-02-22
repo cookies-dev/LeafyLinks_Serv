@@ -66,6 +66,27 @@ class UserController extends Controller
     }
 
     /**
+     * user info api
+     */
+    public function getById(Request $request, $id)
+    {
+        $user = User::find($id);
+        if (is_null($user)) {
+            return response()->json(['error' => 'User not found'], 404);
+        }
+
+        return response()->json(['data' => $user->only([
+            'username',
+            'first_name',
+            'last_name',
+            'profile_picture',
+            'bio',
+            'is_botanic',
+            'is_garden'
+        ])], $this->successStatus);
+    }
+
+    /**
      * me api
      *
      * @return JsonResponse
