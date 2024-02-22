@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Comment;
 use App\Models\Location;
 use App\Models\Plant;
 use App\Models\User;
@@ -20,7 +21,11 @@ class PlantSeeder extends Seeder
                 ]);
                 Plant::factory()->count(5)->create([
                     'location_id' => $location->id,
-                ]);
+                ])->each(function ($plant) {
+                    Comment::factory()->count(3)->create([
+                        'plant_id' => $plant->id,
+                    ]);
+                });
             });
     }
 }
