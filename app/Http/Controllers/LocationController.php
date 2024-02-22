@@ -63,8 +63,8 @@ class LocationController extends Controller
             'name' => 'required|string',
             'lat' => 'required|numeric',
             'lng' => 'required|numeric',
-            'address' => 'required|string',
-            'public' => 'boolean',
+            'address' => 'string',
+            'public' => 'boolean'
         ]);
 
         $location = new Location($request->all());
@@ -92,7 +92,7 @@ class LocationController extends Controller
             'name' => 'required|string',
             'lat' => 'required|numeric',
             'lng' => 'required|numeric',
-            'address' => 'required|string',
+            'address' => 'string',
             'public' => 'boolean',
         ]);
 
