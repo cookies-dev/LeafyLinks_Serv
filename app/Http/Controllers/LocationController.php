@@ -5,7 +5,14 @@ namespace App\Http\Controllers;
 use App\Models\Location;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use OpenApi\Annotations as OA;
 
+/**
+ * @OA\Tag(
+ *     name="Locations",
+ *     description="Endpoints for managing locations"
+ * )
+ */
 class LocationController extends Controller
 {
     private function haversineGreatCircleDistance($latFrom, $longFrom, $latTo, $longTo)
@@ -23,6 +30,35 @@ class LocationController extends Controller
         return $angle * 6371;
     }
 
+    /**
+     * @OA\Get(
+     *     path="/locations/{lat}&{lng}/{dist?}",
+     *     summary="Get nearest locations",
+     *     tags={"Locations"},
+     *     @OA\Parameter(
+     *         name="lat",
+     *         in="path",
+     *         required=true,
+     *         @OA\Schema(type="number"),
+     *         description="Latitude"
+     *     ),
+     *     @OA\Parameter(
+     *         name="lng",
+     *         in="path",
+     *         required=true,
+     *         @OA\Schema(type="number"),
+     *         description="Longitude"
+     *     ),
+     *     @OA\Parameter(
+     *         name="dist",
+     *         in="path",
+     *         @OA\Schema(type="number"),
+     *         description="Distance in kilometers (optional)"
+     *     ),
+     *     @OA\Response(response="200", description="List of nearest locations"),
+     *     @OA\Response(response="404", description="No locations found")
+     * )
+     */
     public function getNearestLocations($lat, $lng, $dist = 50)
     {
         $locations = Location::all()
@@ -39,12 +75,44 @@ class LocationController extends Controller
         return response()->json(['data' => $locations]);
     }
 
+    /**
+     * @OA\Get(
+     *     path="/locations/id/{id}",
+     *     summary="Get location by ID",
+     *     tags={"Locations"},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true,
+     *         @OA\Schema(type="integer"),
+     *         description="Location ID"
+     *     ),
+     *     @OA\Response(response="200", description="Location details"),
+     *     @OA\Response(response="404", description="Location not found")
+     * )
+     */
     public function getLocationById($id)
     {
         $location = Location::findOrFail($id);
         return response()->json(['data' => $location]);
     }
 
+    /**
+     * @OA\Get(
+     *     path="/locations/user/{userId}",
+     *     summary="Get locations by user ID",
+     *     tags={"Locations"},
+     *     @OA\Parameter(
+     *         name="userId",
+     *         in="path",
+     *         required=true,
+     *         @OA\Schema(type="integer"),
+     *         description="User ID"
+     *     ),
+     *     @OA\Response(response="200", description="User's locations"),
+     *     @OA\Response(response="403", description="Unauthorized")
+     * )
+     */
     public function getUserLocations(?int $userId = null)
     {
         if ($userId === null && Auth::id() === null) {
@@ -57,6 +125,30 @@ class LocationController extends Controller
         return response()->json(['data' => $locations]);
     }
 
+    /**
+     * @OA\Post(
+     *     path="/locations",
+     *     summary="Create a new location",
+     *     tags={"Locations"},
+     *     security={{"bearerAuth": {}}},
+     *     @OA\RequestBody(
+     *         description="Location data",
+     *         @OA\MediaType(
+     *             mediaType="application/json",
+     *             @OA\Schema(
+     *                 @OA\Property(property="name", type="string"),
+     *                 @OA\Property(property="lat", type="number"),
+     *                 @OA\Property(property="lng", type="number"),
+     *                 @OA\Property(property="address", type="string"),
+     *                 @OA\Property(property="public", type="boolean")
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(response="201", description="Location created successfully"),
+     *     @OA\Response(response="403", description="Unauthorized"),
+     *     @OA\Response(response="422", description="Validation error")
+     * )
+     */
     public function create(Request $request)
     {
         $request->validate([
@@ -77,6 +169,38 @@ class LocationController extends Controller
         );
     }
 
+    /**
+     * @OA\Put(
+     *     path="/locations/{id}",
+     *     summary="Edit a location",
+     *     tags={"Locations"},
+     *     security={{"bearerAuth": {}}},
+     *     @OA\RequestBody(
+     *         description="Updated location data",
+     *         @OA\MediaType(
+     *             mediaType="application/json",
+     *             @OA\Schema(
+     *                 @OA\Property(property="name", type="string"),
+     *                 @OA\Property(property="lat", type="number"),
+     *                 @OA\Property(property="lng", type="number"),
+     *                 @OA\Property(property="address", type="string"),
+     *                 @OA\Property(property="public", type="boolean")
+     *             )
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true,
+     *         @OA\Schema(type="integer"),
+     *         description="Location ID"
+     *     ),
+     *     @OA\Response(response="200", description="Location updated successfully"),
+     *     @OA\Response(response="403", description="Unauthorized"),
+     *     @OA\Response(response="404", description="Location not found"),
+     *     @OA\Response(response="422", description="Validation error")
+     * )
+     */
     public function edit(Request $request, $id)
     {
         $location = Location::findOrFail($id);
@@ -100,6 +224,24 @@ class LocationController extends Controller
         return response()->json(['message' => 'Location updated successfully', 'data' => $location]);
     }
 
+    /**
+     * @OA\Delete(
+     *     path="/locations/{id}",
+     *     summary="Delete a location",
+     *     tags={"Locations"},
+     *     security={{"bearerAuth": {}}},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true,
+     *         @OA\Schema(type="integer"),
+     *         description="Location ID"
+     *     ),
+     *     @OA\Response(response="200", description="Location deleted successfully"),
+     *     @OA\Response(response="403", description="Unauthorized"),
+     *     @OA\Response(response="404", description="Location not found")
+     * )
+     */
     public function delete($id)
     {
         $location = Location::findOrFail($id);

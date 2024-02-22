@@ -6,14 +6,38 @@ use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use OpenApi\Annotations as OA;
 use Validator;
 
+/**
+ * @OA\Tag(
+ *     name="Users",
+ *     description="Endpoints for managing users"
+ * )
+ */
 class UserController extends Controller
 {
     public $successStatus = 200;
 
     /**
-     * login api
+     * @OA\Post(
+     *     path="/users/login",
+     *     summary="User Login",
+     *     tags={"Users"},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         description="Login credentials",
+     *         @OA\MediaType(
+     *             mediaType="application/json",
+     *             @OA\Schema(
+     *                 @OA\Property(property="email", type="string", format="email"),
+     *                 @OA\Property(property="password", type="string")
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(response="200", description="Successful login"),
+     *     @OA\Response(response="400", description="Invalid request")
+     * )
      *
      * @param Request $request
      * @return JsonResponse
@@ -38,7 +62,25 @@ class UserController extends Controller
     }
 
     /**
-     * Register api
+     * @OA\Post(
+     *     path="/users/register",
+     *     summary="User Registration",
+     *     tags={"Users"},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         description="User registration data",
+     *         @OA\MediaType(
+     *             mediaType="application/json",
+     *             @OA\Schema(
+     *                 @OA\Property(property="username", type="string"),
+     *                 @OA\Property(property="email", type="string", format="email"),
+     *                 @OA\Property(property="password", type="string")
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(response="200", description="User created successfully"),
+     *     @OA\Response(response="400", description="Invalid request")
+     * )
      *
      * @param Request $request
      * @return JsonResponse
@@ -66,9 +108,26 @@ class UserController extends Controller
     }
 
     /**
-     * user info api
+     * @OA\Get(
+     *     path="/users/{id}",
+     *     summary="Get User by ID",
+     *     tags={"Users"},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="ID of the user",
+     *         required=true,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(response="200", description="User details retrieved successfully"),
+     *     @OA\Response(response="404", description="User not found")
+     * )
+     *
+     * @param Request $request
+     * @param int $id
+     * @return JsonResponse
      */
-    public function getById(Request $request, $id)
+    public function getById(Request $request, int $id)
     {
         $user = User::find($id);
         if (is_null($user)) {
@@ -87,7 +146,13 @@ class UserController extends Controller
     }
 
     /**
-     * me api
+     * @OA\Get(
+     *     path="/users/me",
+     *     summary="Get current user details",
+     *     tags={"Users"},
+     *     security={{"bearerAuth": {}}},
+     *     @OA\Response(response="200", description="User details retrieved successfully")
+     * )
      *
      * @return JsonResponse
      */
@@ -98,7 +163,31 @@ class UserController extends Controller
     }
 
     /**
-     * update user api
+     * @OA\Put(
+     *     path="/users/me",
+     *     summary="Update current user details",
+     *     tags={"Users"},
+     *     security={{"bearerAuth": {}}},
+     *     @OA\RequestBody(
+     *         description="User update data",
+     *         @OA\MediaType(
+     *             mediaType="application/json",
+     *             @OA\Schema(
+     *             @OA\Property(property="username", type="string"),
+     *             @OA\Property(property="email", type="string", format="email"),
+     *             @OA\Property(property="password", type="string"),
+     *             @OA\Property(property="phone", type="string"),
+     *             @OA\Property(property="first_name", type="string"),
+     *             @OA\Property(property="last_name", type="string"),
+     *             @OA\Property(property="profile_picture", type="string"),
+     *             @OA\Property(property="bio", type="string"),
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(response="200", description="User updated successfully"),
+     *     @OA\Response(response="400", description="Invalid request")
+     * )
+     *
      *
      * @param Request $request
      * @return JsonResponse
@@ -138,7 +227,13 @@ class UserController extends Controller
     }
 
     /**
-     * destroy user api
+     * @OA\Delete(
+     *     path="/users/me",
+     *     summary="Delete current user",
+     *     tags={"Users"},
+     *     security={{"bearerAuth": {}}},
+     *     @OA\Response(response="200", description="User deleted successfully")
+     * )
      *
      * @param Request $request
      * @return JsonResponse
@@ -151,9 +246,15 @@ class UserController extends Controller
         return response()->json(['success' => ['message' => 'User deleted successfully']], 200);
     }
 
-
     /**
-     * logout api
+     * @OA\Post(
+     *     path="/users/logout",
+     *     summary="Logout current user",
+     *     tags={"Users"},
+     *     security={{"bearerAuth": {}}},
+     *     @OA\Response(response="200", description="User logged out successfully"),
+     *     @OA\Response(response="400", description="Invalid request")
+     * )
      *
      * @param Request $request
      * @return JsonResponse
