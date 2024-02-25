@@ -7,6 +7,10 @@ on:
       - "Lint Laravel"
     types:
       - completed
+    branches:
+      - dev
+      - preprod
+      - production
 
 env:
   IMAGE_NAME: ${{ github.repository }}
