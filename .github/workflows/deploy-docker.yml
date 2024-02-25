@@ -10,7 +10,8 @@ on:
 env:
   IMAGE_NAME: ${{ github.repository }}
   REGISTRY_GIT: ghcr.io
-  DOCKER_NAMESPACE: maxio/leafylinks
+  DOCKER_NAMESPACE: maxio
+  DOCKER_REPOSITORY: leafylinks
 
 jobs:
   deploy_dev:
@@ -100,10 +101,10 @@ jobs:
 
       - name: Extract metadata (tags, labels) for Docker
         id: meta
-        uses: docker/metadata-action@9ec57ed1fcdbf14dcef7dfbe97b2010124a938b7
+        uses: docker/metadata-action@v5
         with:
           images: |
-            ${{ env.REGISTRY_DOCKER }}
+            ${{ env.DOCKER_NAMESPACE }}/${{ env.DOCKER_REPOSITORY }}
             ${{ env.REGISTRY_GIT }}/${{ github.repository }}
 
       - name: Build and push Docker images
