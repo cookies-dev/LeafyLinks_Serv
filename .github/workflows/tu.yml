@@ -1,8 +1,6 @@
 name: TU Laravel
 
 on:
-  push:
-    branches: [ "feat-*", "feature/*" ]
   pull_request:
     branches: [ "dev", "preprod", "main" ]
 
