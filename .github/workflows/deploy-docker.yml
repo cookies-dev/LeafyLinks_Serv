@@ -10,7 +10,7 @@ on:
 env:
   IMAGE_NAME: ${{ github.repository }}
   REGISTRY_GIT: ghcr.io
-  DOCKER_NAMESPACE: maxio
+  DOCKER_NAMESPACE: maxio/LeafyLinks
 
 jobs:
   deploy_dev:
@@ -103,7 +103,7 @@ jobs:
         uses: docker/metadata-action@9ec57ed1fcdbf14dcef7dfbe97b2010124a938b7
         with:
           images: |
-            ${{ env.DOCKER_NAMESPACE }}/${{ github.repository }}
+            ${{ env.REGISTRY_DOCKER }}
             ${{ env.REGISTRY_GIT }}/${{ github.repository }}
 
       - name: Build and push Docker images
