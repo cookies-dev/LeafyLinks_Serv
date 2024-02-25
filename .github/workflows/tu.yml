@@ -1,8 +1,11 @@
 name: TU Laravel
 
 on:
-  pull_request:
-    branches: [ "dev", "preprod", "main" ]
+  workflow_run:
+    workflows:
+      - "TU Laravel"
+    types:
+      - completed
 
 jobs:
   laravel-tests:

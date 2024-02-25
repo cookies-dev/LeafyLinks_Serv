@@ -1,16 +1,11 @@
 name: Docker deploy
 
 on:
-  workflow_run:
-    workflows:
-      - "TU Laravel"
-      - "Lint Laravel"
-    types:
-      - completed
+  push:
     branches:
       - dev
       - preprod
-      - main
+      - production
 
 env:
   IMAGE_NAME: ${{ github.repository }}
