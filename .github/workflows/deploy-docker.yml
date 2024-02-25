@@ -5,7 +5,7 @@ on:
     branches:
       - dev
       - preprod
-      - production
+      - main
 
 env:
   IMAGE_NAME: ${{ github.repository }}
@@ -76,7 +76,7 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
 
   deploy_prod:
-    if: github.ref == 'refs/heads/production'
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     permissions:
       contents: read
