@@ -10,7 +10,7 @@ on:
     branches:
       - dev
       - preprod
-      - production
+      - main
 
 env:
   IMAGE_NAME: ${{ github.repository }}

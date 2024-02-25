@@ -1,12 +1,7 @@
 name: SSH deploy
 
 on:
-  workflow_run:
-    workflows:
-      - "TU Laravel"
-      - "Lint Laravel"
-    types:
-      - completed
+  push:
     branches:
       - production
 
