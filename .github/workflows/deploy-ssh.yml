@@ -1,0 +1,35 @@
+name: SSH deploy
+
+on:
+  workflow_run:
+    workflows:
+      - "TU Laravel"
+      - "Lint Laravel"
+    types:
+      - completed
+    branches:
+      - production
+
+jobs:
+  deploy:
+    if: github.event.workflow_run.conclusion == 'success'
+    runs-on: ubuntu-latest
+    steps:
+      - name: executing remote ssh commands using password
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.KEY }}
+          port: ${{ secrets.PORT }}
+          script: |
+            cd ${{ secrets.PWD }}
+            git switch production
+            git pull --rebase origin production
+            composer install
+            php artisan migrate:refresh --seed
+            php artisan db:seed --class=PlantSeeder
+            php artisan l5-swagger:generate
+            php artisan config:cache
+            php artisan route:cache
+            php artisan view:cache
