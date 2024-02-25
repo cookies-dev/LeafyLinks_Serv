@@ -10,7 +10,7 @@ on:
 env:
   IMAGE_NAME: ${{ github.repository }}
   REGISTRY_GIT: ghcr.io
-  DOCKER_NAMESPACE: maxio/LeafyLinks
+  DOCKER_NAMESPACE: maxio/leafylinks
 
 jobs:
   deploy_dev:
