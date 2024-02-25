@@ -7,7 +7,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Laravel\Sanctum\Sanctum;
 use Tests\TestCase;
 
-class UserMeTest extends TestCase
+class UserGetTest extends TestCase
 {
     use RefreshDatabase;
 
@@ -114,5 +114,23 @@ class UserMeTest extends TestCase
         $this->assertEquals('last2', $user->last_name);
         $this->assertEquals('picture2', $user->profile_picture);
         $this->assertEquals('bio2', $user->bio);
+    }
+
+    public function testGetUserInformationDoesntExist()
+    {
+        $response = $this->get(Route('user.get', ['id' => 10]));
+        $response->assertStatus(404);
+    }
+
+    public function testGetUserInformationExists()
+    {
+        $user = User::factory()->create();
+        $response = $this->get(Route('user.get', ['id' => $user->id]));
+        $response->assertStatus(200);
+
+        $data = $response->json()['data'];
+        $this->assertEquals($user->username, $data['username']);
+        $this->assertEquals($user->first_name, $data['first_name']);
+        $this->assertEquals($user->last_name, $data['last_name']);
     }
 }

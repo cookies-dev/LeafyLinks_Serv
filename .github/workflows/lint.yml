@@ -1,23 +1,24 @@
-name: Lint
+name: Lint Laravel
 
 on:
   push:
-    branches:
-      - '*'
+    branches: [ "feat-*", "feature/*" ]
+  pull_request:
+    branches: [ "dev", "main" ]
 
 jobs:
-  lint:
+  laravel-tests:
     runs-on: ubuntu-latest
-
     steps:
-      - uses: shivammathur/setup-php@15c43e89cdef867065b0213be354c2841860869e
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.1'
+          php-version: '8.2'
 
-      - name: Checkout code
-        uses: actions/checkout@v2
+      - name: Checkout Repository
+        uses: actions/checkout@v4
 
-      - name: Install Composer dependencies
+      - name: Install Dependencies
         run: composer install --prefer-dist --no-ansi --no-interaction --no-progress --no-scripts --ignore-platform-reqs
 
       - name: Run PHP CodeSniffer

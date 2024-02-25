@@ -16,8 +16,8 @@ return new class () extends Migration {
             $table->unsignedBigInteger('user_id');
             $table->double('lat');
             $table->double('lng');
-            $table->string('address');
-            $table->boolean('public')->default(false);
+            $table->string('address')->nullable();
+            $table->boolean('public')->default(true);
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
