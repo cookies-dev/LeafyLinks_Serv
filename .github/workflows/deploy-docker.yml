@@ -1,12 +1,11 @@
 name: Docker deploy
 
 on:
-  workflow_run:
-    workflows:
-      - "TU Laravel"
-      - "Lint Laravel"
-    types:
-      - completed
+  push:
+    branches:
+      - dev
+      - preprod
+      - production
 
 env:
   IMAGE_NAME: ${{ github.repository }}
@@ -15,7 +14,7 @@ env:
 
 jobs:
   deploy_dev:
-    if: github.event.workflow_run.conclusion == 'success' && github.ref == 'refs/heads/dev'
+    if: github.ref == 'refs/heads/dev'
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -46,7 +45,7 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
 
   deploy_preprod:
-    if: github.event.workflow_run.conclusion == 'success' && github.ref == 'refs/heads/preprod'
+    if: github.ref == 'refs/heads/preprod'
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -77,7 +76,7 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
 
   deploy_prod:
-    if: github.event.workflow_run.conclusion == 'success' && github.ref == 'refs/heads/production'
+    if: github.ref == 'refs/heads/production'
     runs-on: ubuntu-latest
     permissions:
       contents: read

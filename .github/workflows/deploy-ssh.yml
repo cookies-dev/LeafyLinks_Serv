@@ -1,18 +1,12 @@
 name: SSH deploy
 
 on:
-  workflow_run:
-    workflows:
-      - "TU Laravel"
-      - "Lint Laravel"
-    types:
-      - completed
+  push:
     branches:
       - production
 
 jobs:
   deploy:
-    if: github.event.workflow_run.conclusion == 'success'
     runs-on: ubuntu-latest
     steps:
       - name: executing remote ssh commands using password
