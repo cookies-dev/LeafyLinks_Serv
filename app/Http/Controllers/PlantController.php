@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Location;
 use App\Models\Plant;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use OpenApi\Annotations as OA;
@@ -16,6 +17,22 @@ use OpenApi\Annotations as OA;
  */
 class PlantController extends Controller
 {
+
+    /**
+     * @OA\Get(
+     *     path="/api/plants/",
+     *     summary="Get all plants",
+     *     tags={"Plants"},
+     *     @OA\Response(response="200", description="Plant details"),
+     *     @OA\Response(response="404", description="Plant not found")
+     * )
+     */
+    public function all(): JsonResponse
+    {
+        $plants = Plant::all();
+        return response()->json(['data' => $plants]);
+    }
+
     /**
      * @OA\Get(
      *     path="/api/plants/{id}",
@@ -32,7 +49,7 @@ class PlantController extends Controller
      *     @OA\Response(response="404", description="Plant not found")
      * )
      */
-    public function get(int $id)
+    public function get(int $id): JsonResponse
     {
         $plant = Plant::findOrFail($id);
         return response()->json(['data' => $plant]);
@@ -61,7 +78,7 @@ class PlantController extends Controller
      *     @OA\Response(response="404", description="No plants found")
      * )
      */
-    public function search(string $query, int $limit)
+    public function search(string $query, int $limit): JsonResponse
     {
         $plants = Plant::where('name', 'like', '%' . $query . '%')->take($limit)->get();
         return response()->json(['data' => $plants]);
@@ -83,7 +100,7 @@ class PlantController extends Controller
      *     @OA\Response(response="404", description="No plants found at the location")
      * )
      */
-    public function plants(int $idLocation)
+    public function plants(int $idLocation): JsonResponse
     {
         $plants = Plant::where('location_id', $idLocation)->get();
         return response()->json(['data' => $plants]);
@@ -113,7 +130,7 @@ class PlantController extends Controller
      *     @OA\Response(response="422", description="Validation error")
      * )
      */
-    public function create(Request $request)
+    public function create(Request $request): JsonResponse
     {
         $request->validate([
             'location_id' => 'required|integer',
@@ -166,7 +183,7 @@ class PlantController extends Controller
      *     @OA\Response(response="422", description="Validation error")
      * )
      */
-    public function edit(Request $request, int $id)
+    public function edit(Request $request, int $id): JsonResponse
     {
         $request->validate([
             'location_id' => 'required|integer',
@@ -212,7 +229,7 @@ class PlantController extends Controller
      *     @OA\Response(response="404", description="Plant not found")
      * )
      */
-    public function delete(int $id)
+    public function delete(int $id): JsonResponse
     {
         $plant = Plant::findOrFail($id);
 

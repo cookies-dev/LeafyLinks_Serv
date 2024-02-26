@@ -49,6 +49,7 @@ Route::group(['prefix' => 'locations', 'as' => 'location.'], function () {
 });
 
 Route::group(['prefix' => 'plants', 'as' => 'plant.'], function () {
+    Route::get('', [PlantController::class, 'all'])->name('all');
     Route::get('{id}', [PlantController::class, 'get'])->name('get');
     Route::get('search/query={query}&limit={limit}', [PlantController::class, 'search'])->name('search');
     Route::group(['middleware' => 'auth:sanctum'], function () {
