@@ -21,6 +21,7 @@ class PlantFactory extends Factory
             'trefle_id' => 77116,
             'name' => $this->faker->text(20),
             'desc' => $this->faker->realText(200),
+            'image' => $this->faker->image(),
         ];
     }
 }

@@ -16,6 +16,7 @@ return new class () extends Migration {
             $table->unsignedBigInteger('trefle_id')->nullable();
             $table->string('name');
             $table->text('desc');
+            $table->string('image')->nullable();
             $table->boolean('garden_needed')->default(false);
             $table->dateTime('garden_start')->nullable()->default(null);
             $table->dateTime('garden_end')->nullable()->default(null);

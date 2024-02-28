@@ -15,6 +15,20 @@ class Plant extends Model
     use HasFactory;
 
     /**
+     * accessor for image attribute
+     *
+     * @param string $value
+     * @return string
+     */
+    public function getImageAttribute(?string $value): ?string
+    {
+        if (!$value) {
+            return null;
+        }
+        return asset("storage/$value");
+    }
+
+    /**
      * The attributes that are mass assignable.
      *
      * @var array<int, string>
@@ -23,7 +37,8 @@ class Plant extends Model
         'location_id',
         'trefle_id',
         'name',
-        'desc'
+        'desc',
+        'image',
     ];
 
     public function location(): BelongsTo

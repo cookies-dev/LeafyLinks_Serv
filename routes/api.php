@@ -37,7 +37,7 @@ Route::group(['prefix' => 'users', 'as' => 'user.'], function () {
 
 Route::group(['prefix' => 'locations', 'as' => 'location.'], function () {
     Route::get('{lat}&{lng}/{dist?}', [LocationController::class, 'getNearestLocations'])->whereNumber(['lat', 'lng', 'dist'])->name('nearest');
-    Route::get('id/{id}', [LocationController::class, 'getLocationById'])->name('getId');
+    Route::get('{id}', [LocationController::class, 'getLocationById'])->name('getId');
     Route::get('user/{userId}', [LocationController::class, 'getUserLocations'])->name('user');
     Route::group(['middleware' => 'auth:sanctum'], function () {
         Route::get('user', [LocationController::class, 'getUserLocations'])->name('get');
@@ -45,7 +45,7 @@ Route::group(['prefix' => 'locations', 'as' => 'location.'], function () {
         Route::put('{id}', [LocationController::class, 'edit'])->name('edit');
         Route::delete('{id}', [LocationController::class, 'delete'])->name('delete');
     });
-    Route::get('locations/{idLocation}/plants', [PlantController::class, 'plants'])->name('plants');
+    Route::get('{idLocation}/plants', [PlantController::class, 'plants'])->name('plants');
 });
 
 Route::group(['prefix' => 'plants', 'as' => 'plant.'], function () {
@@ -53,7 +53,7 @@ Route::group(['prefix' => 'plants', 'as' => 'plant.'], function () {
     Route::get('{id}', [PlantController::class, 'get'])->name('get');
     Route::get('search/query={query}&limit={limit}', [PlantController::class, 'search'])->name('search');
     Route::group(['middleware' => 'auth:sanctum'], function () {
-        Route::post('', [PlantController::class, 'create'])->name('create');
+        Route::post('', [PlantController::class, 'create'])->name('create')->middleware('optimizeImages');
         Route::put('{id}', [PlantController::class, 'edit'])->name('edit');
         Route::delete('{id}', [PlantController::class, 'delete'])->name('delete');
     });

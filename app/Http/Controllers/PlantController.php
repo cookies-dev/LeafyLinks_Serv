@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Location;
 use App\Models\Plant;
+use App\Traits\Upload;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -17,6 +18,7 @@ use OpenApi\Annotations as OA;
  */
 class PlantController extends Controller
 {
+    use Upload;
 
     /**
      * @OA\Get(
@@ -102,6 +104,8 @@ class PlantController extends Controller
      */
     public function plants(int $idLocation): JsonResponse
     {
+        Location::findOrFail($idLocation);
+
         $plants = Plant::where('location_id', $idLocation)->get();
         return response()->json(['data' => $plants]);
     }
@@ -147,7 +151,12 @@ class PlantController extends Controller
             );
         }
 
-        $plant = new Plant($request->all());
+        $plant = new Plant($request->all(['location_id', 'trefle_id', 'name', 'desc']));
+
+        if ($request->hasFile('image')) {
+            $plant->image = $this->UploadFile($request->file('image'), 'plants');
+        }
+
         $plant->save();
         return response()->json(['message' => 'Plant created successfully', 'data' => $plant], 201);
     }
