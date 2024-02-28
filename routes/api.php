@@ -25,7 +25,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::group(['prefix' => 'users', 'as' => 'user.'], function () {
     Route::get('{id}', [UserController::class, 'getById'])->name('get')->whereNumber('id');
-    Route::post('login', [UserController::class, 'login'])->name('login');
+    Route::any('login', [UserController::class, 'login'])->name('login');
     Route::post('register', [UserController::class, 'register'])->name('register');
     Route::group(['middleware' => 'auth:sanctum'], function () {
         Route::any('me', [UserController::class, 'me'])->name('me');
@@ -40,7 +40,7 @@ Route::group(['prefix' => 'locations', 'as' => 'location.'], function () {
     Route::get('{id}', [LocationController::class, 'getLocationById'])->name('getId');
     Route::get('user/{userId}', [LocationController::class, 'getUserLocations'])->name('user');
     Route::group(['middleware' => 'auth:sanctum'], function () {
-        Route::get('user', [LocationController::class, 'getUserLocations'])->name('get');
+        Route::get('', [LocationController::class, 'getLocations'])->name('get');
         Route::post('', [LocationController::class, 'create'])->name('create');
         Route::put('{id}', [LocationController::class, 'edit'])->name('edit');
         Route::delete('{id}', [LocationController::class, 'delete'])->name('delete');

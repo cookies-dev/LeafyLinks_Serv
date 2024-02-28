@@ -238,13 +238,13 @@
                 }
             }
         },
-        "/api/locations/id/{id}": {
+        "/api/locations/{id}": {
             "get": {
                 "tags": [
                     "Locations"
                 ],
                 "summary": "Get location by ID",
-                "operationId": "043fa0a46133dec1fa1da5283c2e5e4e",
+                "operationId": "f979cc3a65c3b6ea5d5bf558f2aa1455",
                 "parameters": [
                     {
                         "name": "id",
@@ -264,89 +264,7 @@
                         "description": "Location not found"
                     }
                 }
-            }
-        },
-        "/api/locations/user/{userId}": {
-            "get": {
-                "tags": [
-                    "Locations"
-                ],
-                "summary": "Get locations by user ID",
-                "operationId": "88d5c1f280186af617b1895cf09423dd",
-                "parameters": [
-                    {
-                        "name": "userId",
-                        "in": "path",
-                        "description": "User ID",
-                        "required": true,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "User's locations"
-                    },
-                    "403": {
-                        "description": "Unauthorized"
-                    }
-                }
-            }
-        },
-        "/api/locations": {
-            "post": {
-                "tags": [
-                    "Locations"
-                ],
-                "summary": "Create a new location",
-                "operationId": "8a8cba5c79a88ae5a9e5dad751bf9102",
-                "requestBody": {
-                    "description": "Location data",
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "properties": {
-                                    "name": {
-                                        "type": "string"
-                                    },
-                                    "lat": {
-                                        "type": "number"
-                                    },
-                                    "lng": {
-                                        "type": "number"
-                                    },
-                                    "address": {
-                                        "type": "string"
-                                    },
-                                    "public": {
-                                        "type": "boolean"
-                                    }
-                                },
-                                "type": "object"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "201": {
-                        "description": "Location created successfully"
-                    },
-                    "403": {
-                        "description": "Unauthorized"
-                    },
-                    "422": {
-                        "description": "Validation error"
-                    }
-                },
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ]
-            }
-        },
-        "/api/locations/{id}": {
+            },
             "put": {
                 "tags": [
                     "Locations"
@@ -444,6 +362,123 @@
                         "bearerAuth": []
                     }
                 ]
+            }
+        },
+        "/api/locations/user/{userId}": {
+            "get": {
+                "tags": [
+                    "Locations"
+                ],
+                "summary": "Get locations by user ID",
+                "operationId": "88d5c1f280186af617b1895cf09423dd",
+                "parameters": [
+                    {
+                        "name": "userId",
+                        "in": "path",
+                        "description": "User ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "User's locations"
+                    },
+                    "403": {
+                        "description": "Unauthorized"
+                    }
+                }
+            }
+        },
+        "/api/locations": {
+            "get": {
+                "tags": [
+                    "Locations"
+                ],
+                "summary": "Get locations of the logged in user",
+                "operationId": "9e07d23f5af3874daab7e8905700c1f1",
+                "responses": {
+                    "200": {
+                        "description": "User's locations"
+                    },
+                    "403": {
+                        "description": "Unauthorized"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Locations"
+                ],
+                "summary": "Create a new location",
+                "operationId": "8a8cba5c79a88ae5a9e5dad751bf9102",
+                "requestBody": {
+                    "description": "Location data",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "type": "string"
+                                    },
+                                    "lat": {
+                                        "type": "number"
+                                    },
+                                    "lng": {
+                                        "type": "number"
+                                    },
+                                    "address": {
+                                        "type": "string"
+                                    },
+                                    "public": {
+                                        "type": "boolean"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Location created successfully"
+                    },
+                    "403": {
+                        "description": "Unauthorized"
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/plants/": {
+            "get": {
+                "tags": [
+                    "Plants"
+                ],
+                "summary": "Get all plants",
+                "operationId": "5a50987336e9c35fdd115e1a11ee75d7",
+                "responses": {
+                    "200": {
+                        "description": "Plant details"
+                    },
+                    "404": {
+                        "description": "Plant not found"
+                    }
+                }
             }
         },
         "/api/plants/{id}": {
@@ -644,7 +679,7 @@
                 "requestBody": {
                     "description": "Plant data",
                     "content": {
-                        "application/json": {
+                        "multipart/form-data": {
                             "schema": {
                                 "properties": {
                                     "location_id": {
@@ -658,6 +693,9 @@
                                     },
                                     "desc": {
                                         "type": "string"
+                                    },
+                                    "image": {
+                                        "type": "file"
                                     }
                                 },
                                 "type": "object"

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Location;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use OpenApi\Annotations as OA;
@@ -77,7 +78,7 @@ class LocationController extends Controller
 
     /**
      * @OA\Get(
-     *     path="/api/locations/id/{id}",
+     *     path="/api/locations/{id}",
      *     summary="Get location by ID",
      *     tags={"Locations"},
      *     @OA\Parameter(
@@ -113,17 +114,28 @@ class LocationController extends Controller
      *     @OA\Response(response="403", description="Unauthorized")
      * )
      */
-    public function getUserLocations(?int $userId = null)
+    public function getUserLocations(int $userId)
     {
-        if ($userId === null && Auth::id() === null) {
-            return response()->json(['error' => 'Unauthorized', 'message' => 'You are not logged in'], 403);
-        }
-        if ($userId === null) {
-            $userId = Auth::id();
-        }
         $locations = Location::where('user_id', $userId)->get();
         return response()->json(['data' => $locations]);
     }
+
+    /**
+     * @OA\Get(
+     *     path="/api/locations",
+     *     summary="Get locations of the logged in user",
+     *     tags={"Locations"},
+     *     security={{"bearerAuth": {}}},
+     *     @OA\Response(response="200", description="User's locations"),
+     *     @OA\Response(response="403", description="Unauthorized")
+     * )
+     */
+    public function getLocations(): JsonResponse
+    {
+        $locations = Location::where('user_id', Auth::id())->get();
+        return response()->json(['data' => $locations]);
+    }
+
 
     /**
      * @OA\Post(

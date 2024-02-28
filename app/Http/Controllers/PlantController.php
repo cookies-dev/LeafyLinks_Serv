@@ -119,12 +119,13 @@ class PlantController extends Controller
      *     @OA\RequestBody(
      *         description="Plant data",
      *         @OA\MediaType(
-     *             mediaType="application/json",
+     *             mediaType="multipart/form-data",
      *             @OA\Schema(
      *                 @OA\Property(property="location_id", type="integer"),
      *                 @OA\Property(property="trefle_id", type="integer"),
      *                 @OA\Property(property="name", type="string"),
-     *                 @OA\Property(property="desc", type="string")
+     *                 @OA\Property(property="desc", type="string"),
+     *                 @OA\Property(property="image", type="file")
      *             )
      *         )
      *     ),
