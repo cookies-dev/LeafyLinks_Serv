@@ -16,7 +16,7 @@ class UserCreateTest extends TestCase
             'email' => 'test@test.com',
             'password' => 'test1',
         ]);
-        $response->assertStatus(400);
+        $response->assertStatus(422);
     }
 
     public function testCreateUserWithMissingEmail()
@@ -25,7 +25,7 @@ class UserCreateTest extends TestCase
             'username' => 'test',
             'password' => 'test1',
         ]);
-        $response->assertStatus(400);
+        $response->assertStatus(422);
     }
 
     public function testCreateUserWithMissingPassword()
@@ -34,7 +34,7 @@ class UserCreateTest extends TestCase
             'username' => 'test',
             'email' => 'test1@test.com',
         ]);
-        $response->assertStatus(400);
+        $response->assertStatus(422);
     }
 
     public function testCreateUserWithExistingEmail()
@@ -47,7 +47,7 @@ class UserCreateTest extends TestCase
             'email' => 'test2@test.com',
             'password' => 'test1',
         ]);
-        $response->assertStatus(400);
+        $response->assertStatus(422);
     }
 
     public function testCreateUserWithValidData()
