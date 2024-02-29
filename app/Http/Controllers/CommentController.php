@@ -6,6 +6,7 @@ use App\Models\Comment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use OpenApi\Annotations as OA;
+use Validator;
 
 /**
  * @OA\Tag(
@@ -83,10 +84,13 @@ class CommentController extends Controller
      */
     public function create(Request $request)
     {
-        $request->validate([
+        $validator = Validator::make($request->all(), [
             'comment' => 'required|string',
             'plant_id' => 'required|integer|exists:plants,id'
         ]);
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
 
         $comment = new Comment($request->all());
         $comment->user_id = Auth::id();
@@ -124,14 +128,18 @@ class CommentController extends Controller
      */
     public function edit(Request $request, $id)
     {
-        $request->validate([
+        $validator = Validator::make($request->all(), [
             'comment' => 'required|string',
         ]);
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
+
         $comment = Comment::findOrFail($id);
 
         if ($comment->user_id !== Auth::id()) {
             return response()->json(
-                ['error' => 'Unauthorized', 'message' => 'You are not the owner of this comment'],
+                ['errors' => 'Unauthorized', 'message' => 'You are not the owner of this comment'],
                 403
             );
         }
@@ -165,7 +173,7 @@ class CommentController extends Controller
         $comment = Comment::findOrFail($id);
         if ($comment->user_id !== Auth::id() && $comment->plant->location->user_id !== Auth::id()) {
             return response()->json(
-                ['error' => 'Unauthorized', 'message' => 'You are not the owner of this comment'],
+                ['errors' => 'Unauthorized', 'message' => 'You are not the owner of this comment'],
                 403
             );
         }

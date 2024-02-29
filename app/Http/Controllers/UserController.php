@@ -50,10 +50,10 @@ class UserController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json(['error' => $validator->errors()], 400);
+            return response()->json(['errors' => $validator->errors()], 422);
         }
         if (!Auth::attempt($request->only('email', 'password'))) {
-            return response()->json(['error' => 'Failed to login'], 401);
+            return response()->json(['errors' => 'Failed to login'], 401);
         }
         $user = Auth::user();
         $token = $user->createToken('MyApp')->plainTextToken;
@@ -94,7 +94,7 @@ class UserController extends Controller
 
         ]);
         if ($validator->fails()) {
-            return response()->json(['error' => $validator->errors()], 400);
+            return response()->json(['errors' => $validator->errors()], 422);
         }
         $input = $request->all();
         $input['password'] = bcrypt($input['password']);
@@ -131,7 +131,7 @@ class UserController extends Controller
     {
         $user = User::find($id);
         if (is_null($user)) {
-            return response()->json(['error' => 'User not found'], 404);
+            return response()->json(['errors' => 'User not found'], 404);
         }
 
         return response()->json(['data' => $user->only([
@@ -208,13 +208,13 @@ class UserController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json(['error' => $validator->errors()], 400);
+            return response()->json(['errors' => $validator->errors()], 422);
         }
         if ($request->has('is_botanic') && $user->is_botanic != $request->is_botanic) {
-            return response()->json(['error' => 'Cannot edit is_botanic'], 400);
+            return response()->json(['errors' => 'Cannot edit is_botanic'], 422);
         }
         if ($request->has('is_garden') && $user->is_garden != $request->is_garden) {
-            return response()->json(['error' => 'Cannot edit is_garden'], 400);
+            return response()->json(['errors' => 'Cannot edit is_garden'], 422);
         }
 
         if ($request->has('password')) {
@@ -262,7 +262,7 @@ class UserController extends Controller
     public function logout(Request $request)
     {
         if (!$request->user()->currentAccessToken()) {
-            return response()->json(['error' => 'User is not logged in'], 400);
+            return response()->json(['errors' => 'User is not logged in'], 400);
         }
         $request->user()->currentAccessToken()->delete();
         return response()->json(['success' => ['message' => 'User logged out successfully']], 200);

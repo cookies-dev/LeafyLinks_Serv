@@ -7,6 +7,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use OpenApi\Annotations as OA;
+use Validator;
 
 /**
  * @OA\Tag(
@@ -163,13 +164,16 @@ class LocationController extends Controller
      */
     public function create(Request $request)
     {
-        $request->validate([
+        $validator = Validator::make($request->all(), [
             'name' => 'required|string',
             'lat' => 'required|numeric',
             'lng' => 'required|numeric',
             'address' => 'string',
             'public' => 'boolean'
         ]);
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
 
         $location = new Location($request->all());
         $location->user_id = Auth::id();
@@ -219,18 +223,21 @@ class LocationController extends Controller
 
         if (Auth::id() !== $location->user_id) {
             return response()->json(
-                ['error' => 'Unauthorized', 'message' => 'You are not logged in as the owner of this location'],
+                ['errors' => 'Unauthorized', 'message' => 'You are not logged in as the owner of this location'],
                 403
             );
         }
 
-        $request->validate([
+        $validator = Validator::make($request->all(), [
             'name' => 'required|string',
             'lat' => 'required|numeric',
             'lng' => 'required|numeric',
             'address' => 'string',
             'public' => 'boolean',
         ]);
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
 
         $location->update($request->all());
         return response()->json(['message' => 'Location updated successfully', 'data' => $location]);
@@ -260,7 +267,7 @@ class LocationController extends Controller
 
         if (Auth::id() !== $location->user_id) {
             return response()->json(
-                ['error' => 'Unauthorized', 'message' => 'You are not logged in as the owner of this location'],
+                ['errors' => 'Unauthorized', 'message' => 'You are not logged in as the owner of this location'],
                 403
             );
         }
