@@ -61,7 +61,7 @@ class PlantController extends Controller
      * @OA\Get(
      *     path="/api/plants/search/query={query}&limit={limit}",
      *     summary="Search plants",
-     *     tags={"Plants"},
+     *     tags={"Locations"},
      *     @OA\Parameter(
      *         name="query",
      *         in="path",
@@ -88,7 +88,7 @@ class PlantController extends Controller
 
     /**
      * @OA\Get(
-     *     path="/api/plants/{idLocation}/plants",
+     *     path="/api/locations/{idLocation}/plants",
      *     summary="Get plants by location ID",
      *     tags={"Plants"},
      *     @OA\Parameter(

@@ -18,7 +18,7 @@ class PlantFactory extends Factory
     {
         return [
             'location_id' => \App\Models\Location::factory(),
-            'trefle_id' => 77116,
+            'trefle_id' => $this->faker->numberBetween(1, 20000),
             'name' => $this->faker->text(20),
             'desc' => $this->faker->realText(200),
             'image' => $this->faker->image(),
