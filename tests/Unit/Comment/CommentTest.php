@@ -110,7 +110,7 @@ class CommentTest extends TestCase
             'comment' => 'test',
         ]);
         $response->assertStatus(403);
-        $response->assertJson(['error' => 'Unauthorized', 'message' => 'You are not the owner of this comment']);
+        $response->assertJson(['errors' => 'Unauthorized', 'message' => 'You are not the owner of this comment']);
     }
 
     public function testEditComment()
@@ -146,7 +146,7 @@ class CommentTest extends TestCase
         $comment = $this->comments->first();
         $response = $this->deleteJson(route('comment.delete', ['id' => $comment->id]));
         $response->assertStatus(403);
-        $response->assertJson(['error' => 'Unauthorized', 'message' => 'You are not the owner of this comment']);
+        $response->assertJson(['errors' => 'Unauthorized', 'message' => 'You are not the owner of this comment']);
     }
 
     public function testDeleteComment()

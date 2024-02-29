@@ -40,7 +40,7 @@ class UserGetTest extends TestCase
             'email' => $user2->email
         ]);
 
-        $response->assertStatus(400);
+        $response->assertStatus(422);
     }
 
     public function testUpdateUserInformationUsernameAlreadyExists()
@@ -53,7 +53,7 @@ class UserGetTest extends TestCase
             'username' => $user2->username
         ]);
 
-        $response->assertStatus(400);
+        $response->assertStatus(422);
     }
 
     public function testUpdateUserInformationCantEditIsBotanic()
@@ -65,7 +65,7 @@ class UserGetTest extends TestCase
             'is_botanic' => false
         ]);
 
-        $response->assertStatus(400);
+        $response->assertStatus(422);
     }
 
     public function testUpdateUserInformationCantEditIsGarden()
@@ -77,7 +77,7 @@ class UserGetTest extends TestCase
             'is_garden' => false
         ]);
 
-        $response->assertStatus(400);
+        $response->assertStatus(422);
     }
 
     public function testUpdateUserInformation()

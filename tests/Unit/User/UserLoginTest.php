@@ -16,7 +16,7 @@ class UserLoginTest extends TestCase
         $response = $this->post(Route('user.login'), [
             'password' => 'test1',
         ]);
-        $response->assertStatus(400);
+        $response->assertStatus(422);
     }
 
     public function testLoginUserWithMissingPassword()
@@ -24,7 +24,7 @@ class UserLoginTest extends TestCase
         $response = $this->post(Route('user.login'), [
             'email' => 'test@test.com'
         ]);
-        $response->assertStatus(400);
+        $response->assertStatus(422);
     }
 
     public function testLoginUser()
