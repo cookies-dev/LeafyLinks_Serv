@@ -95,7 +95,7 @@ class PlantTest extends TestCase
             'desc' => 'test',
         ]);
         $response->assertStatus(403);
-        $response->assertJson(['error' => 'Unauthorized', 'message' => 'You are not the owner of this location']);
+        $response->assertJson(['errors' => 'Unauthorized', 'message' => 'You are not the owner of this location']);
     }
 
     public function testCreatePlant()
@@ -157,7 +157,7 @@ class PlantTest extends TestCase
             'desc' => 'test',
         ]);
         $response->assertStatus(403);
-        $response->assertJson(['error' => 'Unauthorized', 'message' => 'You are not the owner of current location']);
+        $response->assertJson(['errors' => 'Unauthorized', 'message' => 'You are not the owner of current location']);
     }
 
     public function testEditPlantNotOwnerNewLocation()
@@ -175,7 +175,7 @@ class PlantTest extends TestCase
             'desc' => 'test',
         ]);
         $response->assertStatus(403);
-        $response->assertJson(['error' => 'Unauthorized', 'message' => 'You are not the owner of new location']);
+        $response->assertJson(['errors' => 'Unauthorized', 'message' => 'You are not the owner of new location']);
     }
 
     public function testEditPlant()
@@ -211,7 +211,7 @@ class PlantTest extends TestCase
         Sanctum::actingAs($this->user);
         $response = $this->actingAs($this->user)->deleteJson(route('plant.delete', ['id' => $plant->id]));
         $response->assertStatus(403);
-        $response->assertJson(['error' => 'Unauthorized', 'message' => 'You are not the owner of this location']);
+        $response->assertJson(['errors' => 'Unauthorized', 'message' => 'You are not the owner of this location']);
     }
 
     public function testDeletePlant()

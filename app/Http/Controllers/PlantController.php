@@ -9,6 +9,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use OpenApi\Annotations as OA;
+use Validator;
 
 /**
  * @OA\Tag(
@@ -61,7 +62,7 @@ class PlantController extends Controller
      * @OA\Get(
      *     path="/api/plants/search/query={query}&limit={limit}",
      *     summary="Search plants",
-     *     tags={"Plants"},
+     *     tags={"Locations"},
      *     @OA\Parameter(
      *         name="query",
      *         in="path",
@@ -88,7 +89,7 @@ class PlantController extends Controller
 
     /**
      * @OA\Get(
-     *     path="/api/plants/{idLocation}/plants",
+     *     path="/api/locations/{idLocation}/plants",
      *     summary="Get plants by location ID",
      *     tags={"Plants"},
      *     @OA\Parameter(
@@ -137,17 +138,20 @@ class PlantController extends Controller
      */
     public function create(Request $request): JsonResponse
     {
-        $request->validate([
+        $validator = Validator::make($request->all(), [
             'location_id' => 'required|integer',
             'trefle_id' => 'required|integer',
             'name' => 'required|string',
             'desc' => 'required|string',
         ]);
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
 
         $location = Location::findOrFail($request->location_id);
         if ($location->user_id !== Auth::id()) {
             return response()->json(
-                ['error' => 'Unauthorized', 'message' => 'You are not the owner of this location'],
+                ['errors' => 'Unauthorized', 'message' => 'You are not the owner of this location'],
                 403
             );
         }
@@ -195,16 +199,20 @@ class PlantController extends Controller
      */
     public function edit(Request $request, int $id): JsonResponse
     {
-        $request->validate([
+        $validator = Validator::make($request->all(), [
             'location_id' => 'required|integer',
             'trefle_id' => 'required|integer',
             'name' => 'required|string',
             'desc' => 'required|string',
         ]);
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
+
         $plant = Plant::findOrFail($id);
         if ($plant->location->user_id !== Auth::id()) {
             return response()->json(
-                ['error' => 'Unauthorized', 'message' => 'You are not the owner of current location'],
+                ['errors' => 'Unauthorized', 'message' => 'You are not the owner of current location'],
                 403
             );
         }
@@ -212,7 +220,7 @@ class PlantController extends Controller
         $location = Location::findOrFail($request->location_id);
         if ($location->user_id !== Auth::id()) {
             return response()->json(
-                ['error' => 'Unauthorized', 'message' => 'You are not the owner of new location'],
+                ['errors' => 'Unauthorized', 'message' => 'You are not the owner of new location'],
                 403
             );
         }
@@ -245,7 +253,7 @@ class PlantController extends Controller
 
         if ($plant->location->user_id !== Auth::id()) {
             return response()->json(
-                ['error' => 'Unauthorized', 'message' => 'You are not the owner of this location'],
+                ['errors' => 'Unauthorized', 'message' => 'You are not the owner of this location'],
                 403
             );
         }
