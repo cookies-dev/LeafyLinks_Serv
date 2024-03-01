@@ -29,7 +29,7 @@ Route::group(['prefix' => 'users', 'as' => 'user.'], function () {
     Route::post('register', [UserController::class, 'register'])->name('register');
     Route::group(['middleware' => 'auth:sanctum'], function () {
         Route::any('me', [UserController::class, 'me'])->name('me');
-        Route::put('me', [UserController::class, 'update'])->name('update');
+        Route::put('me', [UserController::class, 'edit'])->name('edit');
         Route::delete('me', [UserController::class, 'destroy'])->name('destroy');
         Route::post('logout', [UserController::class, 'logout'])->name('logout');
     });
