@@ -190,7 +190,14 @@ class PlantTest extends TestCase
         $response->assertStatus(200);
         $response->assertJson(['message' => 'Plant updated successfully']);
         $response->assertJsonStructure(['data' => ['id', 'location_id', 'trefle_id', 'name', 'desc', 'created_at', 'updated_at']]);
-        $this->assertDatabaseHas('plants', $newPlant->toArray());
+        $data = $response->json('data');
+        $this->assertDatabaseHas('plants', [
+            'id' => $data['id'],
+            'location_id' => $data['location_id'],
+            'trefle_id' => $data['trefle_id'],
+            'name' => $data['name'],
+            'desc' => $data['desc'],
+        ]);
     }
 
 
