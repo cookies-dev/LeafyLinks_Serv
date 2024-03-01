@@ -37,34 +37,34 @@ Route::group(['prefix' => 'users', 'as' => 'user.'], function () {
 
 Route::group(['prefix' => 'locations', 'as' => 'location.'], function () {
     Route::get('{lat}&{lng}/{dist?}', [LocationController::class, 'getNearestLocations'])->whereNumber(['lat', 'lng', 'dist'])->name('nearest');
-    Route::get('{id}', [LocationController::class, 'getLocationById'])->name('getId');
-    Route::get('user/{userId}', [LocationController::class, 'getUserLocations'])->name('user');
+    Route::get('{id}', [LocationController::class, 'getLocationById'])->name('getId')->whereNumber('id');
+    Route::get('user/{userId}', [LocationController::class, 'getUserLocations'])->name('user')->whereNumber('id');
     Route::group(['middleware' => 'auth:sanctum'], function () {
         Route::get('', [LocationController::class, 'getLocations'])->name('get');
         Route::post('', [LocationController::class, 'create'])->name('create');
-        Route::put('{id}', [LocationController::class, 'edit'])->name('edit');
-        Route::delete('{id}', [LocationController::class, 'delete'])->name('delete');
+        Route::put('{id}', [LocationController::class, 'edit'])->name('edit')->whereNumber('id');
+        Route::delete('{id}', [LocationController::class, 'delete'])->name('delete')->whereNumber('id');
     });
     Route::get('{idLocation}/plants', [PlantController::class, 'plants'])->name('plants');
 });
 
 Route::group(['prefix' => 'plants', 'as' => 'plant.'], function () {
     Route::get('', [PlantController::class, 'all'])->name('all');
-    Route::get('{id}', [PlantController::class, 'get'])->name('get');
+    Route::get('{id}', [PlantController::class, 'get'])->name('get')->whereNumber('id');
     Route::get('search/query={query}&limit={limit}', [PlantController::class, 'search'])->name('search');
     Route::group(['middleware' => 'auth:sanctum'], function () {
         Route::post('', [PlantController::class, 'create'])->name('create')->middleware('optimizeImages');
-        Route::put('{id}', [PlantController::class, 'edit'])->name('edit');
-        Route::delete('{id}', [PlantController::class, 'delete'])->name('delete');
+        Route::put('{id}', [PlantController::class, 'edit'])->name('edit')->whereNumber('id');
+        Route::delete('{id}', [PlantController::class, 'delete'])->name('delete')->whereNumber('id');
     });
     Route::get('plant/{plantId}/comment/', [CommentController::class, 'get'])->name('comments');
 });
 
 Route::group(['prefix' => 'comments', 'as' => 'comment.'], function () {
-    Route::get('{id}', [CommentController::class, 'getById'])->name('get');
+    Route::get('{id}', [CommentController::class, 'getById'])->name('get')->whereNumber('id');
     Route::group(['middleware' => 'auth:sanctum'], function () {
         Route::post('', [CommentController::class, 'create'])->name('create');
-        Route::put('{id}', [CommentController::class, 'edit'])->name('edit');
-        Route::delete('{id}', [CommentController::class, 'delete'])->name('delete');
+        Route::put('{id}', [CommentController::class, 'edit'])->name('edit')->whereNumber('id');
+        Route::delete('{id}', [CommentController::class, 'delete'])->name('delete')->whereNumber('id');
     });
 });

@@ -92,7 +92,7 @@ class CommentController extends Controller
             return response()->json(['errors' => $validator->errors()], 422);
         }
 
-        $comment = new Comment($request->all());
+        $comment = new Comment($validator->validated());
         $comment->user_id = Auth::id();
         $comment->save();
         return response()->json(['message' => 'Comment created successfully', 'data' => $comment], 201);
