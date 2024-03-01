@@ -607,7 +607,7 @@
         "/api/plants/search/query={query}&limit={limit}": {
             "get": {
                 "tags": [
-                    "Plants"
+                    "Locations"
                 ],
                 "summary": "Search plants",
                 "operationId": "542ef883aa931cb0ed92ad151de005e9",
@@ -641,13 +641,13 @@
                 }
             }
         },
-        "/api/plants/{idLocation}/plants": {
+        "/api/locations/{idLocation}/plants": {
             "get": {
                 "tags": [
                     "Plants"
                 ],
                 "summary": "Get plants by location ID",
-                "operationId": "f42643bf9876c904553d289202f76086",
+                "operationId": "b2f09db24bfef2a45430ad3a5fbdef68",
                 "parameters": [
                     {
                         "name": "idLocation",
