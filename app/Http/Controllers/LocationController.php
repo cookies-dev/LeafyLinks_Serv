@@ -175,7 +175,7 @@ class LocationController extends Controller
             return response()->json(['errors' => $validator->errors()], 422);
         }
 
-        $location = new Location($request->all());
+        $location = new Location($validator->validated());
         $location->user_id = Auth::id();
         $location->save();
 
@@ -239,7 +239,7 @@ class LocationController extends Controller
             return response()->json(['errors' => $validator->errors()], 422);
         }
 
-        $location->update($request->all());
+        $location->update($validator->validated());
         return response()->json(['message' => 'Location updated successfully', 'data' => $location]);
     }
 
