@@ -36,7 +36,7 @@ class UserGetTest extends TestCase
         Sanctum::actingAs($user);
         $user2 = User::factory()->create(['email' => 'test2@test.com']);
 
-        $response = $this->put(Route('user.update'), [
+        $response = $this->put(Route('user.edit'), [
             'email' => $user2->email
         ]);
 
@@ -49,7 +49,7 @@ class UserGetTest extends TestCase
         Sanctum::actingAs($user);
         $user2 = User::factory()->create(['username' => 'test2']);
 
-        $response = $this->put(Route('user.update'), [
+        $response = $this->put(Route('user.edit'), [
             'username' => $user2->username
         ]);
 
@@ -61,7 +61,7 @@ class UserGetTest extends TestCase
         $user = User::factory()->create(['is_botanic' => true]);
         Sanctum::actingAs($user);
 
-        $response = $this->put(Route('user.update'), [
+        $response = $this->put(Route('user.edit'), [
             'is_botanic' => false
         ]);
 
@@ -73,7 +73,7 @@ class UserGetTest extends TestCase
         $user = User::factory()->create(['is_garden' => true]);
         Sanctum::actingAs($user);
 
-        $response = $this->put(Route('user.update'), [
+        $response = $this->put(Route('user.edit'), [
             'is_garden' => false
         ]);
 
@@ -94,7 +94,7 @@ class UserGetTest extends TestCase
         ]);
         Sanctum::actingAs($user);
 
-        $response = $this->actingAs($user)->put(Route('user.update'), [
+        $response = $this->actingAs($user)->put(Route('user.edit'), [
             'username' => 'test2',
             'email' => 'test2@test.com',
             'password' => 'password2',

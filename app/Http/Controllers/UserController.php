@@ -165,11 +165,11 @@ class UserController extends Controller
     /**
      * @OA\Put(
      *     path="/api/users/me",
-     *     summary="Update current user details",
+     *     summary="Edit current user details",
      *     tags={"Users"},
      *     security={{"bearerAuth": {}}},
      *     @OA\RequestBody(
-     *         description="User update data",
+     *         description="User edit data",
      *         @OA\MediaType(
      *             mediaType="application/json",
      *             @OA\Schema(
@@ -192,7 +192,7 @@ class UserController extends Controller
      * @param Request $request
      * @return JsonResponse
      */
-    public function update(Request $request)
+    public function edit(Request $request)
     {
         $user = $request->user();
 

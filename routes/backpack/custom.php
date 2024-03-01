@@ -15,6 +15,7 @@ Route::group([
         (array) config('backpack.base.middleware_key', 'admin')
     ),
     'namespace' => 'App\Http\Controllers\Admin',
+    'as' => 'backpack.'
 ], function () { // custom admin routes
     Route::crud('user', 'UserCrudController');
     Route::crud('plant', 'PlantCrudController');
