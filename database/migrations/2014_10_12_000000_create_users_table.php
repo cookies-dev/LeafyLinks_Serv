@@ -23,6 +23,7 @@ return new class () extends Migration {
             $table->text('bio')->nullable();
             $table->boolean('is_botanic')->nullable()->default(false);
             $table->boolean('is_garden')->nullable()->default(false);
+            $table->boolean('is_admin')->nullable()->default(false);
             $table->rememberToken();
             $table->timestamps();
         });

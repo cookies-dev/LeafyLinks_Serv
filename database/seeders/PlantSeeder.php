@@ -27,18 +27,5 @@ class PlantSeeder extends Seeder
                     ]);
                 });
             });
-
-        User::where('username', 'test')->orWhere('email', 'test@test.fr')->delete();
-
-        User::factory()->create([
-            'username' => 'test',
-            'email' => 'test@test.fr',
-            'password' => bcrypt('test'),
-        ])
-            ->each(function ($user) {
-                Location::factory()->create([
-                    'user_id' => $user->id,
-                ]);
-            });
     }
 }

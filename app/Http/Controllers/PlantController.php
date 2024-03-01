@@ -143,6 +143,7 @@ class PlantController extends Controller
             'trefle_id' => 'required|integer',
             'name' => 'required|string',
             'desc' => 'required|string',
+            'image' => 'image|mimes:jpeg,png,jpg,gif,svg',
         ]);
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()], 422);
@@ -156,7 +157,7 @@ class PlantController extends Controller
             );
         }
 
-        $plant = new Plant($request->all(['location_id', 'trefle_id', 'name', 'desc']));
+        $plant = new Plant($validator->validated());
 
         if ($request->hasFile('image')) {
             $plant->image = $this->UploadFile($request->file('image'), 'plants');
@@ -225,7 +226,7 @@ class PlantController extends Controller
             );
         }
 
-        $plant->update($request->all());
+        $plant->update($validator->validated());
         return response()->json(['message' => 'Plant updated successfully', 'data' => $plant]);
     }
 
