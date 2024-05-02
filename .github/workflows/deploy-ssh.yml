@@ -26,6 +26,7 @@ jobs:
             git pull --rebase origin production
             rm .env .env.example
             mv .env.production .env
+            sed -i "s/DB_PASSWORD=/DB_PASSWORD=${{ secrets.DB_PASSWORD }}/g" .env
             mkdir -p storage/plants
             composer install
             php artisan migrate:refresh --seed
