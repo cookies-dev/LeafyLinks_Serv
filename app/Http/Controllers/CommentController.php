@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Comment;
+use App\Models\Plant;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use OpenApi\Annotations as OA;
@@ -18,7 +19,7 @@ class CommentController extends Controller
 {
     /**
      * @OA\Get(
-     *     path="/api/plant/{plantId}/comment/",
+     *     path="/api/plants/{plantId}/comments/",
      *     summary="Get comments by plant ID",
      *     tags={"Plants"},
      *     @OA\Parameter(
@@ -28,13 +29,21 @@ class CommentController extends Controller
      *         @OA\Schema(type="integer"),
      *         description="Plant ID"
      *     ),
-     *     @OA\Response(response="200", description="List of comments for the plant"),
-     *     @OA\Response(response="404", description="No comments found for the plant")
+     *     @OA\Response(response="200", description="List of comments for the plant")
+     *     @OA\Response(response="404", description="Plant not found")
      * )
      */
     public function get(int $plantId)
     {
+        $plant = Plant::find($plantId);
+        if (!$plant) {
+            return response()->json(['message' => 'Plant not found'], 404);
+        }
+
         $comments = Comment::where('plant_id', $plantId)->get();
+        if ($comments->isEmpty()) {
+            return response()->json(['data' => []], 200);
+        }
         return response()->json(['data' => $comments->toArray()], 200);
     }
 
@@ -78,7 +87,6 @@ class CommentController extends Controller
      *     ),
      *     @OA\Response(response="201", description="Comment created successfully"),
      *     @OA\Response(response="403", description="Unauthorized"),
-     *     @OA\Response(response="404", description="Plant not found"),
      *     @OA\Response(response="422", description="Validation error")
      * )
      */
