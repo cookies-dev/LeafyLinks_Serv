@@ -51,6 +51,21 @@ class Plant extends Model
         return $this->belongsTo(Location::class);
     }
 
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
+    }
+
+    public function getUserIdAttribute(): int
+    {
+        return $this->location->user_id;
+    }
+
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults();

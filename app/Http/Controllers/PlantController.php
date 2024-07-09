@@ -33,6 +33,12 @@ class PlantController extends Controller
     public function all(): JsonResponse
     {
         $plants = Plant::all();
+        $plants->each(function ($plant) {
+            $plant->user_id = $plant->location->user_id;
+            $plant->comments = $plant->comments()->get();
+        });
+
+
         return response()->json(['data' => $plants]);
     }
 
@@ -55,6 +61,8 @@ class PlantController extends Controller
     public function get(int $id): JsonResponse
     {
         $plant = Plant::findOrFail($id);
+        $plant->user_id = $plant->location->user_id;
+        $plant->comments = $plant->comments()->get();
         return response()->json(['data' => $plant]);
     }
 
@@ -84,6 +92,11 @@ class PlantController extends Controller
     public function search(string $query, int $limit): JsonResponse
     {
         $plants = Plant::where('name', 'like', '%' . $query . '%')->take($limit)->get();
+        $plants->each(function ($plant) {
+            $plant->user_id = $plant->location->user_id;
+            $plant->comments = $plant->comments()->get();
+        });
+
         return response()->json(['data' => $plants]);
     }
 
@@ -108,6 +121,11 @@ class PlantController extends Controller
         Location::findOrFail($idLocation);
 
         $plants = Plant::where('location_id', $idLocation)->get();
+        $plants->each(function ($plant) {
+            $plant->user_id = $plant->location->user_id;
+            $plant->comments = $plant->comments()->get();
+        });
+
         return response()->json(['data' => $plants]);
     }
 
