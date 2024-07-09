@@ -1,6 +1,6 @@
 <?php
 
-namespace Plant;
+namespace Tests\Unit\Plant;
 
 use App\Models\Location;
 use App\Models\Plant;

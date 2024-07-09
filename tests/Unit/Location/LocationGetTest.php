@@ -1,6 +1,6 @@
 <?php
 
-namespace Location;
+namespace Tests\Unit\Location;
 
 use App\Models\Location;
 use Illuminate\Foundation\Testing\RefreshDatabase;

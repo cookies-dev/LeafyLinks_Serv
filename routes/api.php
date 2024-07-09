@@ -57,7 +57,7 @@ Route::group(['prefix' => 'plants', 'as' => 'plant.'], function () {
         Route::put('{id}', [PlantController::class, 'edit'])->name('edit')->whereNumber('id');
         Route::delete('{id}', [PlantController::class, 'delete'])->name('delete')->whereNumber('id');
     });
-    Route::get('plants/{plantId}/comments/', [CommentController::class, 'get'])->name('comments');
+    Route::get('{plantId}/comments', [CommentController::class, 'get'])->name('comments');
 });
 
 Route::group(['prefix' => 'comments', 'as' => 'comment.'], function () {

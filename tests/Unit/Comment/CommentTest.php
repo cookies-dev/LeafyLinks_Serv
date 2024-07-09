@@ -1,6 +1,6 @@
 <?php
 
-namespace Comment;
+namespace Tests\Unit\Comment;
 
 use App\Models\Comment;
 use App\Models\Plant;
