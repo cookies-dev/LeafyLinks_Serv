@@ -29,7 +29,7 @@ class CommentController extends Controller
      *         @OA\Schema(type="integer"),
      *         description="Plant ID"
      *     ),
-     *     @OA\Response(response="200", description="List of comments for the plant")
+     *     @OA\Response(response="200", description="List of comments for the plant"),
      *     @OA\Response(response="404", description="Plant not found")
      * )
      */
